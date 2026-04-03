@@ -16,22 +16,23 @@ class AuthController extends Controller
         ]);
 
         if (!Auth::attempt($credentials)) {
-            return response()->json(['message' => 'Invalid credentials'], 401);
+            return response()->noContent(401);
         }
 
         $request->session()->regenerate();
 
-        return response()->json(['message' => 'Logged in']);
+        return response()->noContent();
     }
 
     public function register(Request $request) {
         $credentials = $request->validate([
+            'username' => 'required',
             'email' => 'required|email',
             'password' => 'required'
         ]);
 
         User::create($credentials);
-        return response()->json(['message' => 'Registered']);
+        return response()->noContent();
     }
 
     public function logout(Request $request)
@@ -40,7 +41,7 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return response()->json(['message' => 'Logged out']);
+        return response()->noContent();
     }
 
     public function user(Request $request)
