@@ -22,6 +22,7 @@ export class AuthClient {
       switchMap((response: any) => handleResponse(response)),
       catchError((error: HttpErrorResponse) => handleError(error))
     );
+
     return await firstValueFrom(request$);
   }
 
@@ -49,6 +50,7 @@ export class AuthClient {
       switchMap((response: any) => handleResponse(response)),
       catchError((error: HttpErrorResponse) => handleError(error))
     );
+
     return await firstValueFrom(request$);
   }
 
@@ -66,7 +68,17 @@ export class AuthClient {
     return await firstValueFrom(request$);
   }
 
-  logout() {
-    return this.http.post(`${this.baseUrl}/logout`, null);
+  async logout() {
+    const url = `${this.baseUrl}/logout`;
+    const options: any = {
+      observe: 'response'
+    };
+
+    const request$ = this.http.post(url, null, options).pipe(
+      switchMap((response: any) => handleResponse(response)),
+      catchError((error: HttpErrorResponse) => handleError(error))
+    );
+
+    return await firstValueFrom(request$);
   }
 }
