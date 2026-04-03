@@ -1,6 +1,6 @@
 import { inject, Injectable, InjectionToken } from '@angular/core';
 import { LoginBody, RegisterBody } from '../interfaces/auth';
-import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, firstValueFrom, switchMap } from 'rxjs';
 import { handleError } from '../helpers/error';
 import { handleResponse } from '../helpers/response';

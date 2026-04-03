@@ -1,9 +1,9 @@
 import { Cookie } from "../interfaces/cookie";
 
 export function getCookie(name: string) {
-    const cookie: Cookie | undefined = document.cookie.split("&")
+    const cookie: Cookie | undefined = document.cookie.split(":")
         .map(cookie => {
-            const array = cookie.split("=");
+            const array = cookie.trim().split("=");
             return {
                 name: array[0],
                 value: array[1]

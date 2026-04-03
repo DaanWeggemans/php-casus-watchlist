@@ -21,7 +21,7 @@ export const laravelInterceptor: HttpInterceptorFn = (request, next) => {
 
   return next(request).pipe(
     catchError((error: HttpErrorResponse) => {
-      if (error.status === 419) {
+      if (error.status === 419 && !error.url?.includes("sanctum/csrf-cookie")) {
         return from(api.csrf()).pipe(
           switchMap(() => {
             const csrf_token = getCookie("XSRF-TOKEN");

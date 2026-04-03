@@ -4,6 +4,7 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { API_BASE_URL } from './common/clients/clients';
+import { environment } from '../environments/environment';
 
 
 export const appConfig: ApplicationConfig = {
@@ -13,7 +14,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptors([laravelInterceptor])),
     {
       provide: API_BASE_URL,
-      useValue: "http://localhost:8000"
+      useValue: environment.baseUrl
     }
   ]
 };
