@@ -45,4 +45,29 @@ class FranchiseController extends Controller
         $franchise->delete();
         return response()->noContent();
     }
+
+    public function edit(Request $request, Franchise $franchise)
+    {
+        if ($franchise->user_id != $request->user()->id)
+            return response()->noContent(400);
+
+        if ($request->has('name')) {
+            $validated = $request->validate([
+                'name' => ['required']
+            ]);
+
+            $franchise->name = $validated['name'];
+        }
+
+        if ($request->has('index')) {
+            $validated = $request->validate([
+                'index' => ['required', 'integer', 'min:1']
+            ]);
+
+            $franchise->index = $validated['index'];
+        }
+
+        $franchise->save();
+        return response()->noContent();
+    }
 }

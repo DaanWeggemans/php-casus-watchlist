@@ -144,4 +144,18 @@ export class WatchlistClient {
 
     return await firstValueFrom(request$);
   }
+
+  async editFranchise(id: string, body: any) {
+    const url = `${this.baseUrl}/watchlist/franchises/${id}`;
+    const options: any = {
+      observe: 'response'
+    };
+
+    const request$ = this.http.put(url, body, options).pipe(
+      switchMap((response: any) => handleResponse(response)),
+      catchError((error: HttpErrorResponse) => handleError(error))
+    );
+
+    return await firstValueFrom(request$);
+  }
 }
