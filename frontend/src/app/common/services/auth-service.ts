@@ -1,7 +1,7 @@
 import { inject, Injectable } from "@angular/core";
 import { AuthClient } from "../clients/clients";
 import { User } from "../interfaces/user";
-import { LoginBody } from "../interfaces/auth";
+import { LoginBody, RegisterBody } from "../interfaces/auth";
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -11,19 +11,16 @@ export class AuthService {
 
     async login(body: LoginBody) {
         let result = await this.authClient.login(body);
-        if (result.succeeded) {
-            result = await this.authClient.user();
-            if (result.succeeded) {
-                const user = result.result;
-                this._user = {
-                    id: user.id,
-                    username: user.username,
-                    email: user.email
-                };
-            } else {
-                await this.logout();
-            }
-        }
+        if (result.succeeded)
+            /* set */ this.user();
+
+        return result;
+    }
+
+    async register(body: RegisterBody) {
+        let result = await this.authClient.register(body);
+        if (result.succeeded)
+            await this.login(body);
 
         return result;
     }
@@ -49,7 +46,8 @@ export class AuthService {
     }
 
     async logout() {
-        await this.authClient.logout();
+        if (this.isAuthorized === true)
+            await this.authClient.logout();
         this.isAuthorized = false;
         this._user = undefined;
     }

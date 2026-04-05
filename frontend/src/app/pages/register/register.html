@@ -1,5 +1,12 @@
 <div class="root">
-    <form class="login" [formGroup]="group" (ngSubmit)="login()">
+    <form class="login" [formGroup]="group" (ngSubmit)="register()">
+        <div>
+            <label for="username">Username</label>
+            <input class="input" id="username" type="text" formControlName="username">
+            @if (error().username) {
+                <p class="error">{{ error().username }}</p>
+            }
+        </div>
         <div>
             <label for="email">Email</label>
             <input class="input" id="email" type="email" formControlName="email">
@@ -15,8 +22,8 @@
             }
         </div>
         <div class="actions">
-            <input class="action" type="submit" value="Login">
-            <a class="action" routerLink="/register">Register</a>
+            <input class="action" type="submit" value="Register">
+            <a class="action" routerLink="/login">Login</a>
         </div>
     </form>
 </div>
