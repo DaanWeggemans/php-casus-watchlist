@@ -2,8 +2,12 @@
     <a id="placeholder"></a>
     <nav>
         <a routerLink="/feed" routerLinkActive="active">Feed</a>
+        @if (authService.isAuthorized()) {
+            <a routerLink="/followed" routerLinkActive="active">Followed</a>
+            <a routerLink="/watchlist" routerLinkActive="active">Watchlist</a>
+        }
     </nav>
-    <a id="profile" routerLink="/login">
+    <a id="profile" (click)="logout()" [routerLink]="!authService.isAuthorized() ? '/login' : null">
         <div></div>
     </a>
 </header>

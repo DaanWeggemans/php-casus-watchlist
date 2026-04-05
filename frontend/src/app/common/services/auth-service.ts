@@ -1,4 +1,4 @@
-import { inject, Injectable } from "@angular/core";
+import { inject, Injectable, signal } from "@angular/core";
 import { AuthClient } from "../clients/clients";
 import { User } from "../interfaces/user";
 import { LoginBody, RegisterBody } from "../interfaces/auth";
@@ -7,12 +7,12 @@ import { LoginBody, RegisterBody } from "../interfaces/auth";
 export class AuthService {
     private authClient = inject(AuthClient);
     private _user?: User;
-    isAuthorized?: boolean;
+    isAuthorized = signal<boolean | undefined>(undefined);
 
     async login(body: LoginBody) {
         let result = await this.authClient.login(body);
         if (result.succeeded)
-            /* set */ this.user();
+            await /* set */ this.user();
 
         return result;
     }
@@ -31,7 +31,7 @@ export class AuthService {
         } else {
             const result = await this.authClient.user();
             if (result.succeeded) {
-                this.isAuthorized = true;
+                this.isAuthorized.set(true);
                 const user = result.result;
                 this._user = {
                     id: user.id,
@@ -46,9 +46,10 @@ export class AuthService {
     }
 
     async logout() {
-        if (this.isAuthorized === true)
+        if (this.isAuthorized() === true) {
+            this.isAuthorized.set(false);
+            this._user = undefined;
             await this.authClient.logout();
-        this.isAuthorized = false;
-        this._user = undefined;
+        }
     }
 }
