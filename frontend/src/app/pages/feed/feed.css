@@ -21,7 +21,7 @@ main {
     width: 500px;
 }
 
-#profile {
+.profile {
     background-color: var(--primary-background);
     border: 2px solid var(--secondary-button);
     left: calc(-65px - 0.5rem);

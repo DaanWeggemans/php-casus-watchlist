@@ -39,17 +39,23 @@ export class AuthService {
                     email: user.email
                 };
             } else {
-                await this.logout();
+                this.isAuthorized.set(false);
+                this._user = undefined;
             }
             return this._user;
         }
     }
 
     async logout() {
-        if (this.isAuthorized() === true) {
-            this.isAuthorized.set(false);
-            this._user = undefined;
-            await this.authClient.logout();
-        }
+        if (!this.isAuthorized())
+            return;
+
+        this.reset();
+        await this.authClient.logout();
+    }
+
+    reset() {
+        this.isAuthorized.set(undefined);
+        this._user = undefined;
     }
 }

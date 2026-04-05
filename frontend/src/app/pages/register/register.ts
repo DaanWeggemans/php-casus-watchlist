@@ -76,7 +76,7 @@ export class Register {
     if (response.username) {
       if (response.username.some((x: string) => x.includes("empty"))) {
         error.username = "De username moet ingevuld zijn!";
-      } else error.password = "Er is een onverwachte fout opgetreden!";
+      } else error.username = "Er is een onverwachte fout opgetreden!";
     }
 
     if (response.email) {
@@ -86,7 +86,7 @@ export class Register {
         error.email = "De email moet een geldig e-mailadres zijn!";
       } else if (response.email.some((x: string) => x.includes("taken"))) {
         error.email = "De email wordt al gebruikt!";
-      } else error.password = "Er is een onverwachte fout opgetreden!";
+      } else error.email = "Er is een onverwachte fout opgetreden!";
     }
 
     if (response.password) {

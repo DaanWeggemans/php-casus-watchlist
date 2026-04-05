@@ -9,7 +9,7 @@ export const logoutInterceptor: HttpInterceptorFn = (request, next) => {
   return next(request).pipe(
     catchError((error: HttpErrorResponse) => {
       if (error.status === 401)
-        authService.logout();
+        authService.reset();
 
       return throwError(() => error);
     })

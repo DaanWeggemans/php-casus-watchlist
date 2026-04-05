@@ -11,7 +11,7 @@ import { AuthService } from './common/services/auth-service';
 export class App implements OnInit {
   authService = inject(AuthService);
 
-  async ngOnInit() {
-    await this.authService.user();
+  ngOnInit() {
+    this.authService.user();
   }
 }
