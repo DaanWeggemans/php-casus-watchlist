@@ -7,6 +7,7 @@ import { LoginBody } from "../interfaces/auth";
 export class AuthService {
     private authClient = inject(AuthClient);
     private _user?: User;
+    isAuthorized?: boolean;
 
     async login(body: LoginBody) {
         let result = await this.authClient.login(body);
@@ -20,7 +21,7 @@ export class AuthService {
                     email: user.email
                 };
             } else {
-                await this.reset();
+                await this.logout();
             }
         }
 
@@ -33,6 +34,7 @@ export class AuthService {
         } else {
             const result = await this.authClient.user();
             if (result.succeeded) {
+                this.isAuthorized = true;
                 const user = result.result;
                 this._user = {
                     id: user.id,
@@ -40,14 +42,15 @@ export class AuthService {
                     email: user.email
                 };
             } else {
-                await this.reset();
+                await this.logout();
             }
             return this._user;
         }
     }
 
-    async reset() {
+    async logout() {
         await this.authClient.logout();
+        this.isAuthorized = false;
         this._user = undefined;
     }
 }

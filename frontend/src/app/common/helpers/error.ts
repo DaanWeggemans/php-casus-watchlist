@@ -4,7 +4,7 @@ import { of } from "rxjs";
 
 export function handleError(response: HttpErrorResponse) {
     const error: Response = {
-        error: response.error,
+        error: response.error?.errors ?? response.error,
         succeeded: response.ok,
         status: response.status
     };

@@ -27,7 +27,7 @@ export class AuthClient {
   }
 
   async login(body: LoginBody) {
-    const url = `${this.baseUrl}/login`;
+    const url = `${this.baseUrl}/auth/login`;
     const options: any = {
       observe: 'response'
     };
@@ -41,7 +41,7 @@ export class AuthClient {
   }
 
   async register(body: RegisterBody) {
-    const url = `${this.baseUrl}/register`;
+    const url = `${this.baseUrl}/auth/register`;
     const options: any = {
       observe: 'response'
     };
@@ -55,7 +55,7 @@ export class AuthClient {
   }
 
   async user() {
-    const url = `${this.baseUrl}/user`;
+    const url = `${this.baseUrl}/auth/user`;
     const options: any = {
       observe: 'response'
     };
@@ -69,7 +69,7 @@ export class AuthClient {
   }
 
   async logout() {
-    const url = `${this.baseUrl}/logout`;
+    const url = `${this.baseUrl}/auth/logout`;
     const options: any = {
       observe: 'response'
     };

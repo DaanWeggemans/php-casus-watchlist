@@ -46,3 +46,8 @@
         flex: 1;
     }
 }
+
+.error {
+    font-size: 0.8rem;
+    color: red;
+}

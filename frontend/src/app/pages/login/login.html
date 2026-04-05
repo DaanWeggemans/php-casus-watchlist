@@ -3,10 +3,16 @@
         <div>
             <label for="email">Email</label>
             <input class="input" id="email" type="text" formControlName="email">
+            @if (error().email) {
+                <p class="error">{{ error().email }}</p>
+            }
         </div>
         <div>
             <label for="password">Password</label>
             <input class="input" id="password" type="password" formControlName="password">
+            @if (error().password) {
+                <p class="error">{{ error().password }}</p>
+            }
         </div>
         <div class="actions">
             <input class="action" type="submit" value="Login">
