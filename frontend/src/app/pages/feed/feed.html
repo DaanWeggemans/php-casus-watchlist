@@ -1,0 +1,10 @@
+<div class="root">
+    <app-header></app-header>
+    <main>
+        @for (item of [].constructor(4); track $index) {
+            <div class="post">
+                <div class="profile"></div>
+            </div>
+        }
+    </main>
+</div>

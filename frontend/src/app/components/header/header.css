@@ -1,0 +1,38 @@
+header {
+    justify-content: space-between;
+    align-items: center;
+    display: flex;
+    padding: 2rem;
+}
+
+nav {
+    background-color: var(--primary-background);
+    border: 2px solid var(--secondary-button);
+    padding: 0.6rem 0.8rem;
+    border-radius: 50px;
+    width: fit-content;
+    display: flex;
+    gap: 0.5rem;
+
+    a {
+        background-color: var(--primary-button);
+        padding: 0.8rem 2rem;
+        border-radius: 50px;
+        display: block;
+
+        &.active {
+            background-color: var(--secondary-button);
+        }
+    }
+}
+
+#profile, #placeholder {
+    aspect-ratio: 1 / 1;
+    height: 65px;
+}
+
+#profile {
+    background-color: var(--primary-background);
+    border: 2px solid var(--secondary-button);
+    border-radius: 50%;
+}

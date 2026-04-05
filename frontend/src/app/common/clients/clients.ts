@@ -22,11 +22,12 @@ export class AuthClient {
       switchMap((response: any) => handleResponse(response)),
       catchError((error: HttpErrorResponse) => handleError(error))
     );
+
     return await firstValueFrom(request$);
   }
 
   async login(body: LoginBody) {
-    const url = `${this.baseUrl}/login`;
+    const url = `${this.baseUrl}/auth/login`;
     const options: any = {
       observe: 'response'
     };
@@ -40,7 +41,7 @@ export class AuthClient {
   }
 
   async register(body: RegisterBody) {
-    const url = `${this.baseUrl}/register`;
+    const url = `${this.baseUrl}/auth/register`;
     const options: any = {
       observe: 'response'
     };
@@ -49,11 +50,12 @@ export class AuthClient {
       switchMap((response: any) => handleResponse(response)),
       catchError((error: HttpErrorResponse) => handleError(error))
     );
+
     return await firstValueFrom(request$);
   }
 
   async user() {
-    const url = `${this.baseUrl}/user`;
+    const url = `${this.baseUrl}/auth/user`;
     const options: any = {
       observe: 'response'
     };
@@ -66,7 +68,17 @@ export class AuthClient {
     return await firstValueFrom(request$);
   }
 
-  logout() {
-    return this.http.post(`${this.baseUrl}/logout`, null);
+  async logout() {
+    const url = `${this.baseUrl}/auth/logout`;
+    const options: any = {
+      observe: 'response'
+    };
+
+    const request$ = this.http.post(url, null, options).pipe(
+      switchMap((response: any) => handleResponse(response)),
+      catchError((error: HttpErrorResponse) => handleError(error))
+    );
+
+    return await firstValueFrom(request$);
   }
 }
