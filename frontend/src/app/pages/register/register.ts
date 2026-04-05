@@ -38,7 +38,7 @@ export class Register {
       } = { username: undefined, email: undefined, password: undefined };
 
       if (!username)
-        error.username = ["The password cannot be empty!"];
+        error.username = ["The username cannot be empty!"];
 
       if (!email)
         error.email = ["The email cannot be empty!"];
