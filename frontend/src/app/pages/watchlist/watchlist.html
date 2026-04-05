@@ -1,4 +1,8 @@
 <div class="root">
     <app-header></app-header>
-    <main></main>
+    <main>
+        @for (item of items(); track $index) {
+            <p>{{ item.name }}</p>
+        }
+    </main>
 </div>
