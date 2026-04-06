@@ -20,7 +20,7 @@ class FranchiseController extends Controller
     {
         if ($franchise->user_id != $request->user()->id)
             return response()->noContent(400);
-        return $franchise;
+        return $franchise->only(['id', 'name', 'index']);
     }
 
     public function create(Request $request)
