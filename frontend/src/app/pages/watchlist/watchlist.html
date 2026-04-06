@@ -1,7 +1,7 @@
 <div class="root">
     <app-header></app-header>
     <main>
-        @for (item of items(); track $index) {
+        @for (item of items(); track item.id) {
             <a class="franchise" [routerLink]="`/watchlist/${item.id}`">
                 <div class="image">
                     <img src="https://static.thenounproject.com/png/3376954-200.png" alt="">
