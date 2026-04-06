@@ -113,7 +113,7 @@ export class DetailWatchlist implements OnInit {
 
     if (response.name) {
       if (response.name.some((x: string) => x.includes("empty"))) {
-        error.name = "De name moet ingevuld zijn!";
+        error.name = "De naam moet ingevuld zijn!";
       } else error.name = "Er is een onverwachte fout opgetreden!";
     }
 
