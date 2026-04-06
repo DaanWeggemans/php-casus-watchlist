@@ -9,7 +9,10 @@ class FranchiseController extends Controller
 {
     public function getAll(Request $request)
     {
-        $franchises = Franchise::where('user_id', $request->user()->id)->get(['id', 'name', 'index']);
+        $franchises = Franchise::where('user_id', $request->user()->id)
+            ->orderBy('index')
+            ->orderBy('id')
+            ->get(['id', 'name', 'index']);
         return $franchises;
     }
 
