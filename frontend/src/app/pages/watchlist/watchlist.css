@@ -3,3 +3,45 @@
     min-height: 100vh;
     display: flex;
 }
+
+main {
+    grid-template-columns: repeat(auto-fit, 14rem);
+    justify-content: center;
+    padding: 0 2rem 2rem;
+    display: grid;
+    gap: 1rem;
+}
+
+.franchise {
+    background-color: var(--primary-background);
+    border: 2px solid var(--secondary-button);
+    justify-content: space-between;
+    flex-direction: column;
+    border-radius: 0.4rem;
+    align-items: center;
+    cursor: pointer;
+    height: 20rem;
+    display: flex;
+
+    .image {
+        border-radius: 0.4rem;
+        place-items: center;
+        overflow: hidden;
+        display: grid;
+
+        img {
+            object-fit: contain;
+            height: 17rem;
+            width: 100%;
+        }
+    }
+
+    p {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        text-align: center;
+        overflow: hidden;
+        padding: 0.5rem;
+        width: 13rem;
+    }
+}

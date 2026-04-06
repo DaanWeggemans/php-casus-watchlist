@@ -5,6 +5,12 @@ header {
     padding: 2rem;
 }
 
+.middle {
+    align-items: center;
+    display: flex;
+    gap: 0.5rem;
+}
+
 nav {
     background-color: var(--primary-background);
     border: 2px solid var(--secondary-button);
@@ -26,8 +32,9 @@ nav {
     }
 }
 
-#profile, #placeholder {
+#profile, .placeholder {
     aspect-ratio: 1 / 1;
+    display: block;
     height: 65px;
 }
 
@@ -35,4 +42,16 @@ nav {
     background-color: var(--primary-background);
     border: 2px solid var(--secondary-button);
     border-radius: 50%;
+}
+
+#add {
+    background-color: var(--primary-background);
+    border: 2px solid var(--secondary-button);
+    color: hsl(0, 0%, 90%);
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 55px;
+    font-size: 2rem;
+    height: 65px;
 }

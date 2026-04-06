@@ -1,12 +1,20 @@
 <header>
-    <a id="placeholder"></a>
-    <nav>
-        <a routerLink="/feed" routerLinkActive="active">Feed</a>
-        @if (authService.isAuthorized()) {
-            <a routerLink="/followed" routerLinkActive="active">Followed</a>
-            <a routerLink="/watchlist" routerLinkActive="active">Watchlist</a>
+    <span class="placeholder"></span>
+    <div class="middle">
+        @if (router.url.includes('watchlist')) {
+            <span class="placeholder"></span>
         }
-    </nav>
+        <nav>
+            <a routerLink="/feed" routerLinkActive="active">Feed</a>
+            @if (authService.isAuthorized()) {
+                <a routerLink="/followed" routerLinkActive="active">Followed</a>
+                <a routerLink="/watchlist" routerLinkActive="active">Watchlist</a>
+            }
+        </nav>
+        @if (router.url.includes('watchlist')) {
+            <a id="add" routerLink="/watchlist/new">+</a>
+        }
+    </div>
     <a id="profile" (click)="logout()" [routerLink]="!authService.isAuthorized() ? '/login' : null">
         <div></div>
     </a>

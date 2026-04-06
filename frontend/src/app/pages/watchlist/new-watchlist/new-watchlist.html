@@ -1,0 +1,15 @@
+<div class="root">
+    <form class="login" [formGroup]="group" (ngSubmit)="create()">
+        <div>
+            <label for="name">Name</label>
+            <input class="input" id="name" type="text" formControlName="name">
+            @if (error().name) {
+                <p class="error">{{ error().name }}</p>
+            }
+        </div>
+        <div class="actions">
+            <input class="action" type="submit" value="Create">
+            <a class="action" routerLink="/watchlist">Back</a>
+        </div>
+    </form>
+</div>

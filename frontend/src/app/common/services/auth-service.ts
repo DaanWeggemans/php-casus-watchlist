@@ -50,12 +50,12 @@ export class AuthService {
         if (!this.isAuthorized())
             return;
 
-        this.reset();
+        this.reset(false);
         await this.authClient.logout();
     }
 
-    reset() {
-        this.isAuthorized.set(undefined);
+    reset(isAuthorized: boolean | undefined = undefined) {
+        this.isAuthorized.set(isAuthorized);
         this._user = undefined;
     }
 }
