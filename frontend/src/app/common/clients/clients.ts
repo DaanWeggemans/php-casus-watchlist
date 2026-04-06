@@ -4,7 +4,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, firstValueFrom, switchMap } from 'rxjs';
 import { handleError } from '../helpers/error';
 import { handleResponse } from '../helpers/response';
-import { FranchiseBody } from '../interfaces/franchise';
+import { FranchiseBody, FranchiseEditBody } from '../interfaces/franchise';
 
 export const API_BASE_URL = new InjectionToken<string>("");
 
@@ -145,7 +145,7 @@ export class WatchlistClient {
     return await firstValueFrom(request$);
   }
 
-  async editFranchise(id: string, body: any) {
+  async editFranchise(id: string, body: FranchiseEditBody) {
     const url = `${this.baseUrl}/watchlist/franchises/${id}`;
     const options: any = {
       observe: 'response'

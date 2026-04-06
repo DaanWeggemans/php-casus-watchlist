@@ -4,6 +4,7 @@ import { firstValueFrom } from 'rxjs';
 import { Header } from '../../../components/header/header';
 import { WatchlistClient } from '../../../common/clients/clients';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Franchise } from '../../../common/interfaces/franchise';
 
 @Component({
   selector: 'app-detail-watchlist',
@@ -21,7 +22,7 @@ export class DetailWatchlist implements OnInit {
     index: new FormControl(1, [Validators.required, Validators.min(1)])
   });
 
-  franchise = signal<any>({});
+  franchise = signal<Franchise | undefined>(undefined);
   error = signal<{
     name: string | undefined,
     index: string | undefined
@@ -41,8 +42,8 @@ export class DetailWatchlist implements OnInit {
 
     this.franchise.set(result.result);
     this.group.patchValue({
-      name: this.franchise().name,
-      index: this.franchise().index
+      name: this.franchise()!.name,
+      index: this.franchise()!.index
     });
   }
 
@@ -82,7 +83,7 @@ export class DetailWatchlist implements OnInit {
       return;
     }
 
-    const result = await this.watchlistClient.editFranchise(this.franchise().id, {
+    const result = await this.watchlistClient.editFranchise(this.franchise()!.id, {
       name: name,
       index: index
     });
@@ -98,7 +99,7 @@ export class DetailWatchlist implements OnInit {
   }
 
   async delete() {
-    const result = await this.watchlistClient.deleteFranchise(this.franchise().id);
+    const result = await this.watchlistClient.deleteFranchise(this.franchise()!.id);
     if (!result.succeeded)
       return;
 
@@ -122,6 +123,10 @@ export class DetailWatchlist implements OnInit {
         error.index = "De index moet ingevuld zijn!";
       } else if (response.index.some((x: string) => x.includes("at least 1"))) {
         error.index = "De index moet in ieder geval 1 zijn!";
+      } else if (response.index.some((x: string) => x.includes("greater than"))) {
+        const _error = response.index.find((x: string) => x.includes("greater than"));
+        const index = Number(_error.substring(_error.indexOf("greater than")).split(" ")[2]);
+        error.index = `De index mag niet hoger zijn dan ${index}!`;
       } else error.index = "Er is een onverwachte fout opgetreden!";
     }
 

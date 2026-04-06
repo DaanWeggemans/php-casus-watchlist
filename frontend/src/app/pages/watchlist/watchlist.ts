@@ -2,6 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { Header } from '../../components/header/header';
 import { WatchlistClient } from '../../common/clients/clients';
 import { RouterLink } from "@angular/router";
+import { Franchise } from '../../common/interfaces/franchise';
 
 @Component({
   selector: 'app-watchlist',
@@ -12,7 +13,7 @@ import { RouterLink } from "@angular/router";
 export class Watchlist {
   watchlistClient = inject(WatchlistClient);
 
-  items = signal<any[]>([]);
+  items = signal<Franchise[]>([]);
 
   ngOnInit() {
     this.get();

@@ -19,7 +19,7 @@ class FranchiseController extends Controller
     public function get(Request $request, Franchise $franchise)
     {
         if ($franchise->user_id != $request->user()->id)
-            return response()->noContent(400);
+            return response()->noContent(403);
         return $franchise->only(['id', 'name', 'index']);
     }
 
@@ -43,7 +43,7 @@ class FranchiseController extends Controller
     public function delete(Request $request, Franchise $franchise)
     {
         if ($franchise->user_id != $request->user()->id)
-            return response()->noContent(400);
+            return response()->noContent(403);
 
         Franchise::where('user_id', $request->user()->id)
             ->where('index', '>', $franchise->index)
@@ -56,7 +56,7 @@ class FranchiseController extends Controller
     public function edit(Request $request, Franchise $franchise)
     {
         if ($franchise->user_id != $request->user()->id)
-            return response()->noContent(400);
+            return response()->noContent(403);
 
         if ($request->has('name')) {
             $validated = $request->validate([
@@ -68,8 +68,9 @@ class FranchiseController extends Controller
         }
 
         if ($request->has('index')) {
+            $count = Franchise::where('user_id', $request->user()->id)->count();
             $validated = $request->validate([
-                'index' => ['required', 'integer', 'min:1']
+                'index' => ['required', 'integer', 'min:1', "max:$count"]
             ]);
 
             Franchise::where('user_id', $request->user()->id)
