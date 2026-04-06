@@ -33,6 +33,6 @@ class DatabaseSeeder extends Seeder
             'name' => 'Franchise1',
             'index' => 1,
             'user_id' => $user_id
-        ])->save();
+        ]);
     }
 }
