@@ -1,0 +1,25 @@
+<div class="root">
+    <app-header></app-header>
+    <main>
+        <form class="login" [formGroup]="group" (ngSubmit)="submit($event)">
+        <div>
+            <label for="name">Name</label>
+            <input class="input" id="name" type="text" formControlName="name">
+            @if (error().name) {
+                <p class="error">{{ error().name }}</p>
+            }
+        </div>
+        <div>
+            <label for="index">Index</label>
+            <input class="input" id="index" type="number" min="1" formControlName="index">
+            @if (error().index) {
+                <p class="error">{{ error().index }}</p>
+            }
+        </div>
+        <div class="actions">
+            <input class="action" type="submit" value="Update">
+            <input class="action" type="submit" value="Delete">
+        </div>
+    </form>
+    </main>
+</div>

@@ -42,6 +42,10 @@ class FranchiseController extends Controller
         if ($franchise->user_id != $request->user()->id)
             return response()->noContent(400);
 
+        Franchise::where('user_id', $request->user()->id)
+            ->where('index', '>', $franchise->index)
+            ->decrement('index');
+            
         $franchise->delete();
         return response()->noContent();
     }
@@ -57,6 +61,7 @@ class FranchiseController extends Controller
             ]);
 
             $franchise->name = $validated['name'];
+            $franchise->save();
         }
 
         if ($request->has('index')) {
@@ -64,10 +69,18 @@ class FranchiseController extends Controller
                 'index' => ['required', 'integer', 'min:1']
             ]);
 
-            $franchise->index = $validated['index'];
-        }
+            Franchise::where('user_id', $request->user()->id)
+                ->where('index', '>', $franchise->index)
+                ->decrement('index');
 
-        $franchise->save();
+            $franchise->index = $validated['index'];
+            $franchise->save();
+            Franchise::where('user_id', $request->user()->id)
+                ->where('index', '>=', $franchise->index)
+                ->where('id', '!=', $franchise->id)
+                ->increment('index');
+        }
+            
         return response()->noContent();
     }
 }

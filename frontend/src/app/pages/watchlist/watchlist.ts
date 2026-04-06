@@ -1,10 +1,11 @@
 import { Component, inject, signal } from '@angular/core';
 import { Header } from '../../components/header/header';
 import { WatchlistClient } from '../../common/clients/clients';
+import { RouterLink } from "@angular/router";
 
 @Component({
   selector: 'app-watchlist',
-  imports: [Header],
+  imports: [Header, RouterLink],
   templateUrl: './watchlist.html',
   styleUrl: './watchlist.css',
 })
@@ -24,17 +25,11 @@ export class Watchlist {
 
     console.log(response.result);
     this.items.set(response.result);
-
-    // response.result.forEach(async (element: any) => {
-    //   console.log(await this.watchlistClient.getFranchise(element.id));
-    // });
-    // console.log(await this.watchlistClient.createFranchise({
-    //   name: "Franchise3"
-    // }));
-    // console.log(await this.watchlistClient.deleteFranchise('581d57fb-7c1a-4805-a0a1-9ae81ac9e972'));
-    // console.log(await this.watchlistClient.editFranchise('27a1c93a-cda7-4edc-b69a-159dc02836be', {
-    //   index: 2,
-    //   name: "Franchise2"
+    
+    // console.log(await this.watchlistClient.deleteFranchise('7da7b426-7865-4f79-9427-cf2af294e65e'));
+    // console.log(await this.watchlistClient.editFranchise('eaae3db4-995c-493c-b4f5-f7a240dc226d', {
+    //   index: 1,
+    //   name: "Franchise7"
     // }));
   }
 }
