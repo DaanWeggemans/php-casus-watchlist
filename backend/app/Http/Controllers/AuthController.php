@@ -2,20 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\auth\LoginUserRequest;
+use App\Http\Requests\auth\RegisterUserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-    public function login(Request $request)
+    public function login(LoginUserRequest $request)
     {
-        $credentials = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required'
-        ]);
-
-        if (!Auth::attempt($credentials)) {
+        if (!Auth::attempt([
+            'email' => $request['email'],
+            'password' => $request['password']
+        ])) {
             return response()->noContent(401);
         }
 
@@ -24,14 +24,12 @@ class AuthController extends Controller
         return response()->noContent();
     }
 
-    public function register(Request $request) {
-        $credentials = $request->validate([
-            'username' => 'required',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required'
+    public function register(RegisterUserRequest $request) {
+        User::create([
+            'username' => $request['username'],
+            'email' => $request['email'],
+            'password' => $request['password']
         ]);
-
-        User::create($credentials);
         return response()->noContent();
     }
 

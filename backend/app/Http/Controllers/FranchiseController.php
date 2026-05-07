@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateFranchiseRequest;
+use App\Http\Requests\franchise\EditFranchiseRequest;
 use App\Models\Franchise;
 use Illuminate\Http\Request;
 
@@ -11,7 +13,7 @@ class FranchiseController extends Controller
     {
         $franchises = Franchise::where('user_id', $request->user()->id)
             ->orderBy('index')
-            ->orderBy('id')
+            ->orderBy('updated_at')
             ->get(['id', 'name', 'index']);
         return $franchises;
     }
@@ -23,16 +25,12 @@ class FranchiseController extends Controller
         return $franchise->only(['id', 'name', 'index']);
     }
 
-    public function create(Request $request)
+    public function create(CreateFranchiseRequest $request)
     {
-        $validated = $request->validate([
-            'name' => ['required']
-        ]);
-
         $index = Franchise::where('user_id', $request->user()->id)->count() + 1;
 
         $franchise = Franchise::create([
-            'name' => $validated['name'],
+            'name' => $request['name'],
             'index' => $index,
             'user_id' => $request->user()->id
         ]);
@@ -53,31 +51,22 @@ class FranchiseController extends Controller
         return response()->noContent();
     }
 
-    public function edit(Request $request, Franchise $franchise)
+    public function edit(EditFranchiseRequest $request, Franchise $franchise)
     {
         if ($franchise->user_id != $request->user()->id)
             return response()->noContent(403);
 
         if ($request->has('name')) {
-            $validated = $request->validate([
-                'name' => ['required']
-            ]);
-
-            $franchise->name = $validated['name'];
+            $franchise->name = $request['name'];
             $franchise->save();
         }
 
         if ($request->has('index')) {
-            $count = Franchise::where('user_id', $request->user()->id)->count();
-            $validated = $request->validate([
-                'index' => ['required', 'integer', 'min:1', "max:$count"]
-            ]);
-
             Franchise::where('user_id', $request->user()->id)
                 ->where('index', '>', $franchise->index)
                 ->decrement('index');
 
-            $franchise->index = $validated['index'];
+            $franchise->index = $request['index'];
             $franchise->save();
             Franchise::where('user_id', $request->user()->id)
                 ->where('index', '>=', $franchise->index)
