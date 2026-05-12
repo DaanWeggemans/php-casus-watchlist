@@ -1,4 +1,5 @@
 .root {
+    background-color: var(--primary-background);
     flex-direction: column;
     min-height: 100vh;
     display: flex;
@@ -13,8 +14,8 @@ main {
 }
 
 .franchise {
-    background-color: var(--primary-background);
-    border: 2px solid var(--secondary-button);
+    background-color: var(--secondary-background);
+    border: 2px solid var(--primary-button);
     justify-content: space-between;
     flex-direction: column;
     border-radius: 0.4rem;

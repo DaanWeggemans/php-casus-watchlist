@@ -12,8 +12,8 @@ header {
 }
 
 nav {
-    background-color: var(--primary-background);
-    border: 2px solid var(--secondary-button);
+    background-color: var(--secondary-background);
+    border: 1px solid var(--primary-button);
     padding: 0.6rem 0.8rem;
     border-radius: 50px;
     width: fit-content;
@@ -26,8 +26,9 @@ nav {
         border-radius: 50px;
         display: block;
 
-        &.active {
-            background-color: var(--secondary-button);
+        &.active,
+        &:hover {
+            background-color: var(--primary-button-hover);
         }
     }
 }
@@ -39,19 +40,26 @@ nav {
 }
 
 #profile {
-    background-color: var(--primary-background);
-    border: 2px solid var(--secondary-button);
+    background-color: var(--secondary-background);
+    border: 1px solid var(--primary-button);
     border-radius: 50%;
+
+    &:hover {
+        background-color: var(--primary-button-hover);
+    }
 }
 
 #add {
-    background-color: var(--primary-background);
-    border: 2px solid var(--secondary-button);
-    color: hsl(0, 0%, 90%);
+    background-color: var(--primary-button);
+    font-weight: 100;
     aspect-ratio: 1 / 1;
     border-radius: 50%;
     text-align: center;
     line-height: 55px;
     font-size: 2rem;
     height: 65px;
+
+    &:hover {
+        background-color: var(--primary-button-hover);
+    }
 }

@@ -1,29 +1,26 @@
 <div class="root">
-    <form class="login" [formGroup]="group" (ngSubmit)="register()">
-        <div>
-            <label for="username">Username</label>
-            <input class="input" id="username" type="text" formControlName="username">
-            @if (error().username) {
-                <p class="error">{{ error().username }}</p>
-            }
-        </div>
-        <div>
-            <label for="email">Email</label>
-            <input class="input" id="email" type="email" formControlName="email">
-            @if (error().email) {
-                <p class="error">{{ error().email }}</p>
-            }
-        </div>
-        <div>
-            <label for="password">Password</label>
-            <input class="input" id="password" type="password" formControlName="password">
-            @if (error().password) {
-                <p class="error">{{ error().password }}</p>
-            }
-        </div>
-        <div class="actions">
-            <input class="action" type="submit" value="Register">
-            <a class="action" routerLink="/login">Login</a>
-        </div>
-    </form>
+    <div class="form">
+        <h1 class="title">Register</h1>
+        <form [formGroup]="formGroup.group" (ngSubmit)="register()">
+            <section>
+                <label for="username">Username</label>
+                <input class="input" id="username" type="text" formControlName="username">
+                <validation-formgroup-error [errors]="formGroup.errors()['username']"></validation-formgroup-error>
+            </section>
+            <section>
+                <label for="email">Email</label>
+                <input class="input" id="email" type="email" formControlName="email">
+                <validation-formgroup-error [errors]="formGroup.errors()['email']"></validation-formgroup-error>
+            </section>
+            <section>
+                <label for="password">Password</label>
+                <input class="input" id="password" type="password" formControlName="password">
+                <validation-formgroup-error [errors]="formGroup.errors()['password']"></validation-formgroup-error>
+            </section>
+            <div class="actions">
+                <input class="action" type="submit" value="Register" [disabled]="isLoading()">
+                <a class="action" routerLink="/login">Login</a>
+            </div>
+        </form>
+    </div>
 </div>

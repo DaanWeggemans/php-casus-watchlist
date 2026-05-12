@@ -1,53 +1,68 @@
 .root {
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    display: flex;
+    background-color: var(--primary-background);
+    place-items: center;
+    height: 100vh;
+    display: grid;
 }
 
-.login {
-    background-color: var(--primary-background);
-    border: 2px solid var(--secondary-button);
-    flex-direction: column;
-    border-radius: 0.4rem;
-    padding: 1rem;
-    display: flex;
-    gap: 0.5rem;
+.form {
+    background-color: var(--secondary-background);
+    border-radius: 8px;
+}
 
-    & > div {
+.form {
+    .title {
+        padding: 30px;
+    }
+
+    form {
+        flex-direction: column;
+        padding: 0 20px 20px;
+        display: flex;
+        gap: 10px;
+    }
+
+    section {
         flex-direction: column;
         display: flex;
-    }
-}
+        gap: 5px;
 
-.input {
-    border: 1px solid var(--secondary-button);
-    border-radius: 0.4rem;
-    padding: 1rem;
-    width: 20rem;
+        * {
+            display: block;
+        }
 
-    &:focus {
-        outline: none;
+        input:not([type="submit"]) {
+            background-color: var(--primary-background);
+            border: 1px solid var(--primary-button);
+            border-radius: 8px;
+            padding: 10px;
+            width: 300px;
+
+            &:focus {
+                outline: 1px solid var(--primary-button-hover);
+            }
+        }
     }
 }
 
 .actions {
-    flex-direction: row !important;
-    gap: 1rem;
+    margin-top: 10px;
+    display: flex;
+    gap: 5px;
 
-    .action {
-        border: 1px solid var(--secondary-button);
-        background-color: var(--primary-button);
-        border-radius: 0.4rem;
+    input, a {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: var(--primary-button);  
+        border-radius: 4px;
         text-align: center;
-        font-size: 0.8rem;
+        font-size: 14px;
         cursor: pointer;
-        padding: 1rem;
+        padding: 10px;
+        border: none;
         flex: 1;
-    }
-}
 
-.error {
-    font-size: 0.8rem;
-    color: red;
+        &:hover {
+            background-color: var(--primary-button-hover);  
+        }
+    }
 }
