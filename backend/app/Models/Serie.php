@@ -5,12 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
-class Franchise extends Model
+class Serie extends Model
 {
+    protected $table = "series";
+
     protected $keyType = 'string';
     public $incrementing = false;
 
-    protected $fillable = ['name', 'index', 'user_id'];
+    protected $fillable = ['name', 'type', 'done', 'index', 'season', 'image', 'franchise_id', 'user_id'];
 
     public static function booted()
     {

@@ -22,9 +22,9 @@ export class ValidationFormGroup {
         this.keys = Object.keys(object);
         this.object = object;
 
-        const group: ObjectArray<string, [string, ValidatorFn[]]> = { };
+        const group: ObjectArray<string, [string | boolean | null, ValidatorFn[]]> = { };
         this.keys.forEach((key: string) => {
-            const defaultValue: string = object[key][0];
+            const defaultValue: string | boolean | null = object[key][0];
             const validators = object[key][1].map((value: ValidationValidator) => value.validator);
             group[key] = [defaultValue, validators];
         });

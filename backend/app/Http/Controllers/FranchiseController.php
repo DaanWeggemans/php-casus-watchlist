@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreateFranchiseRequest;
+use App\Http\Requests\franchise\CreateFranchiseRequest;
 use App\Http\Requests\franchise\EditFranchiseRequest;
 use App\Models\Franchise;
 use Illuminate\Http\Request;

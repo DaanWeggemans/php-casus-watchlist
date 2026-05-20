@@ -2,7 +2,7 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { Header } from '../../../components/header/header';
-import { WatchlistClient } from '../../../common/clients/clients';
+import { FranchiseClient } from '../../../common/clients/clients';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Franchise } from '../../../common/interfaces/franchise';
 
@@ -13,7 +13,7 @@ import { Franchise } from '../../../common/interfaces/franchise';
   styleUrl: './detail-watchlist.css',
 })
 export class DetailWatchlist implements OnInit {
-  watchlistClient = inject(WatchlistClient);
+  watchlistClient = inject(FranchiseClient);
   activatedRoute = inject(ActivatedRoute);
   router = inject(Router);
 

@@ -1,6 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { WatchlistClient } from '../../../common/clients/clients';
+import { FranchiseClient } from '../../../common/clients/clients';
 import { Router, RouterLink } from '@angular/router';
 
 @Component({
@@ -10,7 +10,7 @@ import { Router, RouterLink } from '@angular/router';
   styleUrl: './new-watchlist.css',
 })
 export class NewWatchlist {
-  watchlistClient = inject(WatchlistClient);
+  watchlistClient = inject(FranchiseClient);
   router = inject(Router);
 
   group = new FormGroup({
