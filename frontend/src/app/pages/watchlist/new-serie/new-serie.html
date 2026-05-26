@@ -4,9 +4,19 @@
         <validation-formgroup-error [errors]="formGroup.errors()['name']"></validation-formgroup-error>
     </section>
     <section>
-        <input type="text" formControlName="type">
+        <select formControlName="type">
+            <option value=""></option>
+            <option value="serie">Serie</option>
+            <option value="movie">Movie</option>
+        </select>
         <validation-formgroup-error [errors]="formGroup.errors()['type']"></validation-formgroup-error>
     </section>
+    @if (formGroup.group.get("type")?.value == "serie") {
+        <section>
+            <input type="number" formControlName="season">
+            <validation-formgroup-error [errors]="formGroup.errors()['season']"></validation-formgroup-error>
+        </section>
+    }
     <section>
         <input type="checkbox" formControlName="done">
         <validation-formgroup-error [errors]="formGroup.errors()['done']"></validation-formgroup-error>

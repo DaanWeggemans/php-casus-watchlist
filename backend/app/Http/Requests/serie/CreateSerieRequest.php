@@ -4,6 +4,7 @@ namespace App\Http\Requests\serie;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class CreateSerieRequest extends FormRequest
 {
@@ -24,7 +25,7 @@ class CreateSerieRequest extends FormRequest
     {
         return [
             'name' => ['required'],
-            'type' => ['required'],
+            'type' => ['required', Rule::in(['serie', 'movie'])],
             'done' => ['required', 'boolean'],
             'season' => ['required_if:type,serie', 'integer', 'min:1'],
             'image' => ['image'],

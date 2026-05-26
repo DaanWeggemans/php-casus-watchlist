@@ -1,6 +1,6 @@
-import { inject, signal } from "@angular/core";
+import { computed, inject, signal } from "@angular/core";
 import { FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn } from "@angular/forms";
-import { ValidationValidator, ValidationValidators } from "../interfaces/validation-form-group";
+import { ValidationType, ValidationValidator, ValidationValidators } from "../interfaces/validation-form-group";
 import { ObjectArray } from "../types/object-array";
 
 /**
@@ -14,17 +14,15 @@ export class ValidationFormGroup {
 
     public group!: FormGroup;
     public errors = signal<ObjectArray<string, string[]>>({ });
-    public get value() {
-        return this.group.value;
-    };
+    public value = computed(() => this.group.value);
 
     constructor(object: ValidationValidators) {
         this.keys = Object.keys(object);
         this.object = object;
 
-        const group: ObjectArray<string, [string | boolean | null, ValidatorFn[]]> = { };
+        const group: ObjectArray<string, [ValidationType, ValidatorFn[]]> = { };
         this.keys.forEach((key: string) => {
-            const defaultValue: string | boolean | null = object[key][0];
+            const defaultValue: ValidationType = object[key][0];
             const validators = object[key][1].map((value: ValidationValidator) => value.validator);
             group[key] = [defaultValue, validators];
         });

@@ -21,7 +21,11 @@ class FranchiseController extends Controller
     public function get(Request $request, Franchise $franchise)
     {
         if ($franchise->user_id != $request->user()->id)
-            return response()->noContent(403);
+            return response()->json([
+                "code" => 403,
+                "message" => "The user does not have access to the franchise."
+            ], 403);
+            
         return $franchise->only(['id', 'name', 'index']);
     }
 
@@ -41,7 +45,10 @@ class FranchiseController extends Controller
     public function delete(Request $request, Franchise $franchise)
     {
         if ($franchise->user_id != $request->user()->id)
-            return response()->noContent(403);
+            return response()->json([
+                "code" => 403,
+                "message" => "The user does not have access to the franchise."
+            ], 403);
 
         Franchise::where('user_id', $request->user()->id)
             ->where('index', '>', $franchise->index)
@@ -54,7 +61,10 @@ class FranchiseController extends Controller
     public function edit(EditFranchiseRequest $request, Franchise $franchise)
     {
         if ($franchise->user_id != $request->user()->id)
-            return response()->noContent(403);
+            return response()->json([
+                "code" => 403,
+                "message" => "The user does not have access to the franchise."
+            ], 403);
 
         if ($request->has('name')) {
             $franchise->name = $request['name'];

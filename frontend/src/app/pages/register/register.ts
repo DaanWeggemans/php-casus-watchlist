@@ -32,7 +32,7 @@ export class Register {
     if (this.isLoading() || !this.formGroup.validate()) return;
     this.isLoading.set(true);
 
-    const value = this.formGroup.value;
+    const value = this.formGroup.value();
     const result = await this.authService.register({
       username: value.username,
       email: value.email,

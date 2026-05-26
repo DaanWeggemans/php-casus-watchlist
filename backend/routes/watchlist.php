@@ -14,4 +14,6 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::get('/watchlist/series', [SerieController::class, 'getAll']);
     Route::get('/watchlist/series/{franchise_id}', [SerieController::class, 'getAllFromFranchise']);
     Route::post('/watchlist/series', [SerieController::class, 'create']);
+    Route::delete('/watchlist/series/{serie}', [SerieController::class, 'delete']);
+    Route::put('/watchlist/series/{serie}', [SerieController::class, 'edit']);
 });

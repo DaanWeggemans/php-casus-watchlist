@@ -18,31 +18,28 @@ export class NewSerie {
     name: ["", [{ validator: Validators.required }]],
     type: ["", [{ validator: Validators.required }]],
     done: [false, [{ validator: Validators.required }]],
+    season: [0, []],
     file: [null, []],
   });
-
-  async ngOnInit() {
-    console.log(await this.serieClient.getAllSeries());
-    // console.log(await this.serieClient.getAllSeriesFromFranchise("27a1c93a-cda7-4edc-b69a-159dc02836be"));
-    console.log(await this.serieClient.getAllSeriesFromFranchise("734b8512-5f7f-4c78-8346-1b1ffffbab5f"));
-  }
 
   async create() {
     if (this.isLoading() || !this.formGroup.validate())
       return;
 
     this.isLoading.set(true);
-    const value = this.formGroup.value;
+    const value = this.formGroup.value();
     const file = value.file as File | null;
-    console.log(value);
-    console.log(await this.serieClient.createSerie({
+    const result = await this.serieClient.createSerie({
       name: value.name,
       type: value.type,
       done: value.done,
       image: file,
-      season: null,
+      season: value.type == "serie" ? value.season : null,
       franchise_id: "734b8512-5f7f-4c78-8346-1b1ffffbab5f"
-    }));
+    });
+
+    if (!result.succeeded)
+      this.formGroup.logLaravelErrors(result.error);
 
     this.isLoading.set(false);
   }
