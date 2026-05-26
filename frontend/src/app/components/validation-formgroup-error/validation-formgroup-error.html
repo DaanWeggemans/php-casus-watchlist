@@ -1,0 +1,5 @@
+@if (errors().length) {
+    @for (error of errors(); track $index) {
+        <p class="error">{{ error }}</p>
+    }
+}

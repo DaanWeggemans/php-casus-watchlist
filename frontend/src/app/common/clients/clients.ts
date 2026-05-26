@@ -4,7 +4,8 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, firstValueFrom, switchMap } from 'rxjs';
 import { handleError } from '../helpers/error';
 import { handleResponse } from '../helpers/response';
-import { FranchiseBody, FranchiseEditBody } from '../interfaces/franchise';
+import { CreateFranchiseRequest, EditFranchiseRequest } from '../interfaces/franchise';
+import { CreateSerieRequest, EditSerieRequest } from '../interfaces/serie';
 
 export const API_BASE_URL = new InjectionToken<string>("");
 
@@ -85,7 +86,7 @@ export class AuthClient {
 }
 
 @Injectable({ providedIn: 'root' })
-export class WatchlistClient {
+export class FranchiseClient {
   baseUrl = inject(API_BASE_URL);
   http = inject(HttpClient);
 
@@ -117,7 +118,7 @@ export class WatchlistClient {
     return await firstValueFrom(request$);
   }
 
-  async createFranchise(body: FranchiseBody) {
+  async createFranchise(body: CreateFranchiseRequest) {
     const url = `${this.baseUrl}/watchlist/franchises`;
     const options: any = {
       observe: 'response'
@@ -145,13 +146,113 @@ export class WatchlistClient {
     return await firstValueFrom(request$);
   }
 
-  async editFranchise(id: string, body: FranchiseEditBody) {
+  async editFranchise(id: string, body: EditFranchiseRequest) {
     const url = `${this.baseUrl}/watchlist/franchises/${id}`;
     const options: any = {
       observe: 'response'
     };
 
     const request$ = this.http.put(url, body, options).pipe(
+      switchMap((response: any) => handleResponse(response)),
+      catchError((error: HttpErrorResponse) => handleError(error))
+    );
+
+    return await firstValueFrom(request$);
+  }
+}
+
+@Injectable({ providedIn: 'root' })
+export class SerieClient {
+  baseUrl = inject(API_BASE_URL);
+  http = inject(HttpClient);
+
+  async getAllSeries() {
+    const url = `${this.baseUrl}/watchlist/series`;
+    const options: any = {
+      observe: 'response'
+    };
+
+    const request$ = this.http.get(url, options).pipe(
+      switchMap((response: any) => handleResponse(response)),
+      catchError((error: HttpErrorResponse) => handleError(error))
+    );
+
+    return await firstValueFrom(request$);
+  }
+
+  async getAllSeriesFromFranchise(id: string) {
+    const url = `${this.baseUrl}/watchlist/series/${id}`;
+    const options: any = {
+      observe: 'response'
+    };
+
+    const request$ = this.http.get(url, options).pipe(
+      switchMap((response: any) => handleResponse(response)),
+      catchError((error: HttpErrorResponse) => handleError(error))
+    );
+
+    return await firstValueFrom(request$);
+  }
+
+  async createSerie(body: CreateSerieRequest) {
+    const url = `${this.baseUrl}/watchlist/series`;
+    const options: any = {
+      observe: 'response'
+    };
+
+    const formData = new FormData();
+    formData.append('name', body.name);
+    formData.append('type', body.type);
+    formData.append('done', body.done ? "1" : "0");
+    if (body.season != null)
+      formData.append('season', body.season.toString());
+    if (body.image != null)
+      formData.append('image', body.image, body.image.name);
+    formData.append('franchise_id', body.franchise_id);
+
+    const request$ = this.http.post(url, formData, options).pipe(
+      switchMap((response: any) => handleResponse(response)),
+      catchError((error: HttpErrorResponse) => handleError(error))
+    );
+
+    return await firstValueFrom(request$);
+  }
+
+  async deleteSerie(id: string) {
+    const url = `${this.baseUrl}/watchlist/series/${id}`;
+    const options: any = {
+      observe: 'response'
+    };
+
+    const request$ = this.http.delete(url, options).pipe(
+      switchMap((response: any) => handleResponse(response)),
+      catchError((error: HttpErrorResponse) => handleError(error))
+    );
+
+    return await firstValueFrom(request$);
+  }
+
+  async editSerie(id: string, body: EditSerieRequest) {
+    const url = `${this.baseUrl}/watchlist/series/${id}`;
+    const options: any = {
+      observe: 'response'
+    };
+
+    const formData = new FormData();
+    formData.append("_method", "PUT");
+
+    if (body.name !== undefined)
+      formData.append('name', body.name);
+    if (body.done !== undefined)
+      formData.append('done', body.done ? "1" : "0");
+    if (body.season !== undefined)
+      formData.append('season', body.season.toString());
+    if (body.image)
+      formData.append('image', body.image, body.image.name);
+    if (body.image === null)
+      formData.append('image', "");
+
+    const request$ = this.http.post(url, formData, options).pipe(
       switchMap((response: any) => handleResponse(response)),
       catchError((error: HttpErrorResponse) => handleError(error))
     );

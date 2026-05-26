@@ -1,7 +1,9 @@
 :root {
-    --primary-background: hsl(0, 0%, 96%);
-    --primary-button: hsl(0, 0%, 98%);
-    --secondary-button: hsl(0, 0%, 94%);
+    --primary-background: hsl(150, 100%, 98%);
+    --secondary-background: hsl(150, 100%, 95%);
+
+    --primary-button: hsl(150, 100%, 93%);
+    --primary-button-hover: hsl(150, 100%, 90%);
 }
 
 * {
@@ -22,4 +24,9 @@ a {
 a,
 button {
     cursor: pointer;
+}
+
+.error {
+    font-size: 0.8rem;
+    color: red;
 }

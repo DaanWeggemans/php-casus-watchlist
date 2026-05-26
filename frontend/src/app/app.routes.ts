@@ -26,6 +26,11 @@ export const routes: Routes = [
         canActivate: [unauthorizedGuard]
     },
     {
+        path: "serie",
+        loadChildren: () => import('./pages/serie/serie.routes').then((serie) => serie.routes),
+        canActivate: [unauthorizedGuard]
+    },
+    {
         path: "**",
         redirectTo: "feed"
     }

@@ -1,8 +1,8 @@
-export interface FranchiseBody {
+export interface CreateFranchiseRequest {
     name: string;
 }
 
-export interface FranchiseEditBody {
+export interface EditFranchiseRequest {
     name?: string;
     index?: number;
 }

@@ -1,20 +1,28 @@
 .root {
+    background-color: var(--primary-background);
     flex-direction: column;
     min-height: 100vh;
     display: flex;
 }
 
 main {
-    grid-template-columns: repeat(auto-fit, 14rem);
-    justify-content: center;
     padding: 0 2rem 2rem;
-    display: grid;
+    display: flex;
     gap: 1rem;
 }
 
+.franchises {
+    grid-template-columns: repeat(auto-fit, 14rem);
+    grid-auto-rows: max-content;
+    justify-content: center;
+    display: grid;
+    gap: 1rem;
+    flex: 1;
+}
+
 .franchise {
-    background-color: var(--primary-background);
-    border: 2px solid var(--secondary-button);
+    background-color: var(--secondary-background);
+    border: 2px solid var(--primary-button);
     justify-content: space-between;
     flex-direction: column;
     border-radius: 0.4rem;
@@ -44,4 +52,28 @@ main {
         padding: 0.5rem;
         width: 13rem;
     }
+}
+
+.selected-franchise-container {
+    position: relative;
+    transition: 250ms;
+    overflow: hidden;
+    width: 29rem;
+
+    &.closed {
+        width: 0;
+
+        .selected-franchise {
+            position: initial;
+        }
+    }
+}
+
+.selected-franchise {
+    background-color: var(--secondary-background);
+    border: 2px solid var(--primary-button);
+    height: calc(100vh - 8.25rem - 2rem);
+    position: fixed;
+    padding: 2rem;
+    width: 29rem;
 }

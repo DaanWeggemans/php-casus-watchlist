@@ -1,13 +1,27 @@
 <div class="root">
-    <app-header></app-header>
+    <app-header [linkButtonNew]="getLink()">Hallo</app-header>
     <main>
-        @for (item of items(); track item.id) {
-            <a class="franchise" [routerLink]="`/watchlist/${item.id}`">
-                <div class="image">
-                    <img src="https://static.thenounproject.com/png/3376954-200.png" alt="">
+        <div class="franchises">
+            @if (isLoading()) {
+                <p>Trying to retrieve watchlist...</p>
+            }
+
+            @for (item of items(); track item.id) {
+                <button class="franchise" (click)="selectFranchise(item)">
+                    <div class="image">
+                        <img src="https://static.thenounproject.com/png/3376954-200.png" alt="">
+                    </div>
+                    <p>{{ item.name }}</p>
+                </button>
+            }
+        </div>
+        <div [class]="`selected-franchise-container${franchise() !== undefined ? '' : ' closed'}`">
+            <div class="selected-franchise">
+                <div class="selected-header">
+                    <h2>{{ franchise()?.name }}</h2>
+                    <button (click)="closeFranchise()">close</button>
                 </div>
-                <p>{{ item.name }}</p>
-            </a>
-        }
+            </div>
+        </div>
     </main>
 </div>

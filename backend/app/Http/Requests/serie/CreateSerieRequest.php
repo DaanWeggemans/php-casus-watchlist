@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Requests\franchise;
+namespace App\Http\Requests\serie;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
-class CreateFranchiseRequest extends FormRequest
+class CreateSerieRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,7 +24,12 @@ class CreateFranchiseRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required']
+            'name' => ['required'],
+            'type' => ['required', Rule::in(['serie', 'movie'])],
+            'done' => ['required', 'boolean'],
+            'season' => ['required_if:type,serie', 'integer', 'min:1'],
+            'image' => ['image'],
+            'franchise_id' => ['required'],
         ];
     }
 }
