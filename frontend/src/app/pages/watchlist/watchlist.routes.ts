@@ -2,7 +2,6 @@ import { Routes } from "@angular/router";
 import { Watchlist } from "./watchlist";
 import { NewWatchlist } from "./new-watchlist/new-watchlist";
 import { DetailWatchlist } from "./detail-watchlist/detail-watchlist";
-import { NewSerie } from "./new-serie/new-serie";
 
 export const routes: Routes = [
     {
@@ -16,9 +15,5 @@ export const routes: Routes = [
     {
         path: ":id",
         component: DetailWatchlist
-    },
-    {
-        path: "serie/new",
-        component: NewSerie
     }
 ];

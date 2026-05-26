@@ -1,7 +1,11 @@
 <div class="root">
-    <app-header></app-header>
+    <app-header [linkButtonNew]="getLink()">Hallo</app-header>
     <main>
         <div class="franchises">
+            @if (isLoading()) {
+                <p>Trying to retrieve watchlist...</p>
+            }
+
             @for (item of items(); track item.id) {
                 <button class="franchise" (click)="selectFranchise(item)">
                     <div class="image">
@@ -13,7 +17,10 @@
         </div>
         <div [class]="`selected-franchise-container${franchise() !== undefined ? '' : ' closed'}`">
             <div class="selected-franchise">
-                <h2>{{ franchise()?.name }}</h2>
+                <div class="selected-header">
+                    <h2>{{ franchise()?.name }}</h2>
+                    <button (click)="closeFranchise()">close</button>
+                </div>
             </div>
         </div>
     </main>

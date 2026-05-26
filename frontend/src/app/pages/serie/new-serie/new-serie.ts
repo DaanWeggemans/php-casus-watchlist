@@ -3,6 +3,8 @@ import { ReactiveFormsModule, Validators } from '@angular/forms';
 import { SerieClient } from '../../../common/clients/clients';
 import { ValidationFormGroup } from '../../../common/helpers/validation-form-group';
 import { ValidationFormgroupError } from '../../../components/validation-formgroup-error/validation-formgroup-error';
+import { ActivatedRoute, Router } from '@angular/router';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-new-serie',
@@ -11,13 +13,15 @@ import { ValidationFormgroupError } from '../../../components/validation-formgro
   styleUrl: './new-serie.css',
 })
 export class NewSerie {
+  activatedRoute = inject(ActivatedRoute);
   serieClient = inject(SerieClient);
+  router = inject(Router);
 
   isLoading = signal<boolean>(false);
   formGroup = new ValidationFormGroup({
     name: ["", [{ validator: Validators.required }]],
     type: ["", [{ validator: Validators.required }]],
-    done: [false, [{ validator: Validators.required }]],
+    done: [false, []],
     season: [0, []],
     file: [null, []],
   });
@@ -29,18 +33,30 @@ export class NewSerie {
     this.isLoading.set(true);
     const value = this.formGroup.value();
     const file = value.file as File | null;
+    const franchise_id = (await firstValueFrom(this.activatedRoute.paramMap)).get("franchise_id");
+    if (!franchise_id) {
+      this.router.navigate(['/watchlist']);
+      return;
+    }
+
     const result = await this.serieClient.createSerie({
       name: value.name,
       type: value.type,
       done: value.done,
       image: file,
       season: value.type == "serie" ? value.season : null,
-      franchise_id: "734b8512-5f7f-4c78-8346-1b1ffffbab5f"
+      franchise_id: franchise_id
     });
 
-    if (!result.succeeded)
-      this.formGroup.logLaravelErrors(result.error);
+    if (!result.succeeded) {
+      if (result.status === 422)
+        this.formGroup.logLaravelErrors(result.error);
 
+      this.isLoading.set(false);
+      return;
+    }
+
+    this.router.navigate([`/watchlist/${franchise_id}`]);
     this.isLoading.set(false);
   }
 

@@ -34,6 +34,7 @@ class EditSerieRequest extends FormRequest
             'done' => ['sometimes', 'boolean'],
             'season' => ['sometimes', 'required_if:type,serie', 'integer', 'min:1'],
             'image' => ['sometimes', 'image', 'nullable'],
+            'franchise_id' => ['required']
         ];
     }
 

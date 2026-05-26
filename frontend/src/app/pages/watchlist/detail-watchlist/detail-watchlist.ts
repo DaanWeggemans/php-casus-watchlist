@@ -3,30 +3,29 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { Header } from '../../../components/header/header';
 import { FranchiseClient } from '../../../common/clients/clients';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ReactiveFormsModule, Validators } from '@angular/forms';
 import { Franchise } from '../../../common/interfaces/franchise';
+import { ValidationFormGroup } from '../../../common/helpers/validation-form-group';
+import { ValidationFormgroupError } from '../../../components/validation-formgroup-error/validation-formgroup-error';
 
 @Component({
   selector: 'app-detail-watchlist',
-  imports: [Header, ReactiveFormsModule],
+  imports: [Header, ReactiveFormsModule, ValidationFormgroupError],
   templateUrl: './detail-watchlist.html',
   styleUrl: './detail-watchlist.css',
 })
 export class DetailWatchlist implements OnInit {
-  watchlistClient = inject(FranchiseClient);
+  franchiseClient = inject(FranchiseClient);
   activatedRoute = inject(ActivatedRoute);
   router = inject(Router);
 
-  group = new FormGroup({
-    name: new FormControl("", [Validators.required]),
-    index: new FormControl(1, [Validators.required, Validators.min(1)])
+  isLoading = signal<boolean>(true);
+  formGroup = new ValidationFormGroup({
+    name: ["", [{ validator: Validators.required }]],
+    index: [1, [{ validator: Validators.required }, { validator: Validators.min(1) }]]
   });
 
   franchise = signal<Franchise | undefined>(undefined);
-  error = signal<{
-    name: string | undefined,
-    index: string | undefined
-  }>({ name: undefined, index: undefined });
 
   ngOnInit() {
     this.get();
@@ -34,17 +33,19 @@ export class DetailWatchlist implements OnInit {
 
   async get() {
     const id = (await firstValueFrom(this.activatedRoute.paramMap)).get("id") ?? "";
-    const result = await this.watchlistClient.getFranchise(id);
+    const result = await this.franchiseClient.getFranchise(id);
     if (!result.succeeded) {
       this.router.navigate(['/watchlist']);
+      this.isLoading.set(false);
       return;
     }
 
     this.franchise.set(result.result);
-    this.group.patchValue({
+    this.formGroup.group.patchValue({
       name: this.franchise()!.name,
       index: this.franchise()!.index
     });
+    this.isLoading.set(false);
   }
 
   async submit(event: SubmitEvent) {
@@ -65,71 +66,38 @@ export class DetailWatchlist implements OnInit {
   }
 
   async update() {
-    const name = this.group.get('name')?.value;
-    const index = this.group.get('index')?.value;
-    if (!name || !index) {
-      const error: {
-        name: string[] | undefined,
-        index: string[] | undefined
-      } = { name: undefined, index: undefined };
+    if (this.isLoading() || !this.formGroup.validate()) return;
+    this.isLoading.set(true);
 
-      if (!name)
-        error.name = ["The name cannot be empty!"];
-      
-      if (!index)
-        error.index = ["The index cannot be empty!"];
-      
-      this.handleError(error);
-      return;
-    }
-
-    const result = await this.watchlistClient.editFranchise(this.franchise()!.id, {
-      name: name,
-      index: index
+    const value = this.formGroup.value();
+    const result = await this.franchiseClient.editFranchise(this.franchise()!.id, {
+      name: value.name,
+      index: value.index
     });
 
     if (!result.succeeded) {
       if (result.status === 422)
-        this.handleError(result.error);
+        this.formGroup.logLaravelErrors(result.error);
 
+      this.isLoading.set(false);
       return;
     }
 
     this.router.navigate(['/watchlist']);
+    this.isLoading.set(false);
   }
 
   async delete() {
-    const result = await this.watchlistClient.deleteFranchise(this.franchise()!.id);
-    if (!result.succeeded)
+    if (this.isLoading()) return;
+    this.isLoading.set(true);
+
+    const result = await this.franchiseClient.deleteFranchise(this.franchise()!.id);
+    if (!result.succeeded) {
+      this.isLoading.set(false);
       return;
+    }
 
     this.router.navigate(['/watchlist']);
-  }
-
-  handleError(response: any) {
-    const error: {
-      name: string | undefined,
-      index: string | undefined
-    } = { name: undefined, index: undefined };
-
-    if (response.name) {
-      if (response.name.some((x: string) => x.includes("empty"))) {
-        error.name = "De naam moet ingevuld zijn!";
-      } else error.name = "Er is een onverwachte fout opgetreden!";
-    }
-
-    if (response.index) {
-      if (response.index.some((x: string) => x.includes("empty"))) {
-        error.index = "De index moet ingevuld zijn!";
-      } else if (response.index.some((x: string) => x.includes("at least 1"))) {
-        error.index = "De index moet in ieder geval 1 zijn!";
-      } else if (response.index.some((x: string) => x.includes("greater than"))) {
-        const _error = response.index.find((x: string) => x.includes("greater than"));
-        const index = Number(_error.substring(_error.indexOf("greater than")).split(" ")[2]);
-        error.index = `De index mag niet hoger zijn dan ${index}!`;
-      } else error.index = "Er is een onverwachte fout opgetreden!";
-    }
-
-    this.error.set(error);
+    this.isLoading.set(false);
   }
 }

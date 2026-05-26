@@ -22,12 +22,6 @@ export class Register {
     password: ["", [{ validator: Validators.required }]]
   });
 
-  error = signal<{
-    username: string | undefined,
-    email: string | undefined,
-    password: string | undefined
-  }>({ username: undefined, email: undefined, password: undefined });
-
   async register() {
     if (this.isLoading() || !this.formGroup.validate()) return;
     this.isLoading.set(true);

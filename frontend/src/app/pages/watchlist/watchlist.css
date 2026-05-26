@@ -13,6 +13,7 @@ main {
 
 .franchises {
     grid-template-columns: repeat(auto-fit, 14rem);
+    grid-auto-rows: max-content;
     justify-content: center;
     display: grid;
     gap: 1rem;

@@ -22,7 +22,7 @@ return new class extends Migration
             $table->uuid('franchise_id')->index();
             $table->uuid('user_id')->index();
             $table->timestamps();
-            $table->foreign('franchise_id')->references('id')->on('franchises');
+            $table->foreign('franchise_id')->references('id')->on('franchises')->cascadeOnDelete();
             $table->foreign('user_id')->references('id')->on('users');
         });
     }

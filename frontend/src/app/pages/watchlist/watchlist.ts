@@ -14,6 +14,7 @@ export class Watchlist {
   serieClient = inject(SerieClient);
 
   items = signal<Franchise[]>([]);
+  isLoading = signal<boolean>(true);
   franchise = signal<Franchise | undefined>(undefined);
 
   ngOnInit() {
@@ -24,11 +25,23 @@ export class Watchlist {
     const response = await this.franchiseClient.getAllFranchises();
     if (!response.succeeded)
       return;
-
+    
     this.items.set(response.result);
+    this.isLoading.set(false);
   }
 
   selectFranchise(franchise: Franchise) {
     this.franchise.set(franchise);
+  }
+
+  closeFranchise() {
+    this.franchise.set(undefined);
+  }
+
+  getLink() {
+    if (!this.franchise())
+      return "/watchlist/new";
+
+    return `/serie/new/${this.franchise()?.id}`;
   }
 }

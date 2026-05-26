@@ -32,7 +32,9 @@ class SerieController extends Controller
 
     public function create(CreateSerieRequest $request)
     {
-        $franchise_exists = Franchise::find($request->franchise_id)->exists();
+        $franchise_exists = Franchise::where('user_id', $request->user()->id)
+            ->where('id', $request->franchise_id)
+            ->exists();
         if (!$franchise_exists)
             return response()->json([
                 "code" => 404,
