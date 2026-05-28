@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Str;
 
 class Serie extends Model
@@ -20,5 +21,15 @@ class Serie extends Model
             if (empty($model->id))
                 $model->id = Str::uuid();
         });
+    }
+
+    public function franchise() : BelongsTo
+    {
+        return $this->belongsTo(Franchise::class);
+    }
+
+    public function user() : BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 }
