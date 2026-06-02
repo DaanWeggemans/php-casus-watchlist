@@ -1,6 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { ReactiveFormsModule, Validators } from '@angular/forms';
-import { SerieClient } from '../../../common/clients/clients';
+import { EpisodeClient, SerieClient } from '../../../common/clients/clients';
 import { ValidationFormGroup } from '../../../common/helpers/validation-form-group';
 import { ValidationFormgroupError } from '../../../components/validation-formgroup-error/validation-formgroup-error';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -8,12 +8,14 @@ import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-new-serie',
+  standalone: true,
   imports: [ReactiveFormsModule, ValidationFormgroupError],
   templateUrl: './new-serie.html',
   styleUrl: './new-serie.css',
 })
 export class NewSerie {
   activatedRoute = inject(ActivatedRoute);
+  episodeClient = inject(EpisodeClient);
   serieClient = inject(SerieClient);
   router = inject(Router);
 
@@ -23,6 +25,7 @@ export class NewSerie {
     type: ["", [{ validator: Validators.required }]],
     done: [false, []],
     season: [0, []],
+    episodes: [0, []],
     file: [null, []],
   });
 
@@ -55,6 +58,11 @@ export class NewSerie {
       this.isLoading.set(false);
       return;
     }
+
+    console.log(await this.episodeClient.createEpisodes({
+      serie_id: result.result.id,
+      episodes: Array.from({ length: value.episodes }, () => ({ name: null }))
+    }));
 
     this.router.navigate([`/watchlist/${franchise_id}`]);
     this.isLoading.set(false);

@@ -51,4 +51,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Serie::class);
     }
+
+    public function episodes() : HasMany
+    {
+        return $this->hasMany(Episode::class);
+    }
 }

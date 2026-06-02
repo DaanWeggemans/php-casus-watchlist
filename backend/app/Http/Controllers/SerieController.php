@@ -17,17 +17,19 @@ class SerieController extends Controller
             ->orderBy('index')
             ->orderBy('updated_at')
             ->get();
+            
         return SerieResource::collection($series);
     }
 
-    public function getAllFromFranchise(Request $request, string $franchise_id)
+    public function getAllFromFranchise(Request $request, Franchise $franchise)
     {
-        $series = Serie::where('user_id', $request->user()->id)
-            ->where('franchise_id', $franchise_id)
-            ->orderBy('index')
-            ->orderBy('updated_at')
-            ->get();
-        return SerieResource::collection($series);
+        if ($franchise->user_id != $request->user()->id)
+            return response()->json([
+                "code" => 403,
+                "message" => "The user does not have access to the franchise."
+            ], 403);
+
+        return SerieResource::collection($franchise->series);
     }
 
     public function create(CreateSerieRequest $request)
@@ -35,6 +37,7 @@ class SerieController extends Controller
         $franchise_exists = Franchise::where('user_id', $request->user()->id)
             ->where('id', $request->franchise_id)
             ->exists();
+            
         if (!$franchise_exists)
             return response()->json([
                 "code" => 404,

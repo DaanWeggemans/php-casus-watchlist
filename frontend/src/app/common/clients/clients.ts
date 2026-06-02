@@ -6,6 +6,7 @@ import { handleError } from '../helpers/error';
 import { handleResponse } from '../helpers/response';
 import { CreateFranchiseRequest, EditFranchiseRequest } from '../interfaces/franchise';
 import { CreateSerieRequest, EditSerieRequest } from '../interfaces/serie';
+import { CreateEpisodeRequest } from '../interfaces/episode';
 
 export const API_BASE_URL = new InjectionToken<string>("");
 
@@ -91,7 +92,7 @@ export class FranchiseClient {
   http = inject(HttpClient);
 
   async getAllFranchises() {
-    const url = `${this.baseUrl}/watchlist/franchises`;
+    const url = `${this.baseUrl}/franchises`;
     const options: any = {
       observe: 'response'
     };
@@ -105,7 +106,7 @@ export class FranchiseClient {
   }
 
   async getFranchise(id: string) {
-    const url = `${this.baseUrl}/watchlist/franchises/${id}`;
+    const url = `${this.baseUrl}/franchises/${id}`;
     const options: any = {
       observe: 'response'
     };
@@ -119,7 +120,7 @@ export class FranchiseClient {
   }
 
   async createFranchise(body: CreateFranchiseRequest) {
-    const url = `${this.baseUrl}/watchlist/franchises`;
+    const url = `${this.baseUrl}/franchises`;
     const options: any = {
       observe: 'response'
     };
@@ -133,7 +134,7 @@ export class FranchiseClient {
   }
 
   async deleteFranchise(id: string) {
-    const url = `${this.baseUrl}/watchlist/franchises/${id}`;
+    const url = `${this.baseUrl}/franchises/${id}`;
     const options: any = {
       observe: 'response'
     };
@@ -147,7 +148,7 @@ export class FranchiseClient {
   }
 
   async editFranchise(id: string, body: EditFranchiseRequest) {
-    const url = `${this.baseUrl}/watchlist/franchises/${id}`;
+    const url = `${this.baseUrl}/franchises/${id}`;
     const options: any = {
       observe: 'response'
     };
@@ -167,7 +168,7 @@ export class SerieClient {
   http = inject(HttpClient);
 
   async getAllSeries() {
-    const url = `${this.baseUrl}/watchlist/series`;
+    const url = `${this.baseUrl}/series`;
     const options: any = {
       observe: 'response'
     };
@@ -181,7 +182,7 @@ export class SerieClient {
   }
 
   async getAllSeriesFromFranchise(id: string) {
-    const url = `${this.baseUrl}/watchlist/series/${id}`;
+    const url = `${this.baseUrl}/series/${id}`;
     const options: any = {
       observe: 'response'
     };
@@ -195,7 +196,7 @@ export class SerieClient {
   }
 
   async createSerie(body: CreateSerieRequest) {
-    const url = `${this.baseUrl}/watchlist/series`;
+    const url = `${this.baseUrl}/series`;
     const options: any = {
       observe: 'response'
     };
@@ -219,7 +220,7 @@ export class SerieClient {
   }
 
   async deleteSerie(id: string) {
-    const url = `${this.baseUrl}/watchlist/series/${id}`;
+    const url = `${this.baseUrl}/series/${id}`;
     const options: any = {
       observe: 'response'
     };
@@ -233,7 +234,7 @@ export class SerieClient {
   }
 
   async editSerie(id: string, body: EditSerieRequest) {
-    const url = `${this.baseUrl}/watchlist/series/${id}`;
+    const url = `${this.baseUrl}/series/${id}`;
     const options: any = {
       observe: 'response'
     };
@@ -253,6 +254,54 @@ export class SerieClient {
       formData.append('image', "");
 
     const request$ = this.http.post(url, formData, options).pipe(
+      switchMap((response: any) => handleResponse(response)),
+      catchError((error: HttpErrorResponse) => handleError(error))
+    );
+
+    return await firstValueFrom(request$);
+  }
+}
+
+@Injectable({ providedIn: 'root' })
+export class EpisodeClient {
+  baseUrl = inject(API_BASE_URL);
+  http = inject(HttpClient);
+
+  async getAllEpisodes() {
+    const url = `${this.baseUrl}/episodes`;
+    const options: any = {
+      observe: 'response'
+    };
+
+    const request$ = this.http.get(url, options).pipe(
+      switchMap((response: any) => handleResponse(response)),
+      catchError((error: HttpErrorResponse) => handleError(error))
+    );
+
+    return await firstValueFrom(request$);
+  }
+
+  async getAllEpisodesFromSerie(id: string) {
+    const url = `${this.baseUrl}/episodes/${id}`;
+    const options: any = {
+      observe: 'response'
+    };
+
+    const request$ = this.http.get(url, options).pipe(
+      switchMap((response: any) => handleResponse(response)),
+      catchError((error: HttpErrorResponse) => handleError(error))
+    );
+
+    return await firstValueFrom(request$);
+  }
+
+  async createEpisodes(body: CreateEpisodeRequest) {
+    const url = `${this.baseUrl}/episodes`;
+    const options: any = {
+      observe: 'response'
+    };
+
+    const request$ = this.http.post(url, body, options).pipe(
       switchMap((response: any) => handleResponse(response)),
       catchError((error: HttpErrorResponse) => handleError(error))
     );
