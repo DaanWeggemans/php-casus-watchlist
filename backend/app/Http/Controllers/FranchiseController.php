@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\franchise\CreateFranchiseRequest;
 use App\Http\Requests\franchise\EditFranchiseRequest;
+use App\Http\Resources\franchise\FranchiseResource;
 use App\Models\Franchise;
 use Illuminate\Http\Request;
 
@@ -14,8 +15,9 @@ class FranchiseController extends Controller
         $franchises = Franchise::where('user_id', $request->user()->id)
             ->orderBy('index')
             ->orderBy('updated_at')
-            ->get(['id', 'name', 'index']);
-        return $franchises;
+            ->get();
+
+        return FranchiseResource::collection($franchises);
     }
 
     public function get(Request $request, Franchise $franchise)
@@ -26,7 +28,7 @@ class FranchiseController extends Controller
                 "message" => "The user does not have access to the franchise."
             ], 403);
             
-        return $franchise->only(['id', 'name', 'index']);
+        return new FranchiseResource($franchise);
     }
 
     public function create(CreateFranchiseRequest $request)
@@ -39,7 +41,7 @@ class FranchiseController extends Controller
             'user_id' => $request->user()->id
         ]);
 
-        return $franchise;
+        return new FranchiseResource($franchise);
     }
 
     public function delete(Request $request, Franchise $franchise)

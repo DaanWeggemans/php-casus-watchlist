@@ -1,6 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { ReactiveFormsModule, Validators } from '@angular/forms';
-import { SerieClient } from '../../../common/clients/clients';
+import { EpisodeClient, SerieClient } from '../../../common/clients/clients';
 import { ValidationFormGroup } from '../../../common/helpers/validation-form-group';
 import { ValidationFormgroupError } from '../../../components/validation-formgroup-error/validation-formgroup-error';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -8,12 +8,14 @@ import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-new-serie',
+  standalone: true,
   imports: [ReactiveFormsModule, ValidationFormgroupError],
   templateUrl: './new-serie.html',
   styleUrl: './new-serie.css',
 })
 export class NewSerie {
   activatedRoute = inject(ActivatedRoute);
+  episodeClient = inject(EpisodeClient);
   serieClient = inject(SerieClient);
   router = inject(Router);
 
@@ -23,6 +25,7 @@ export class NewSerie {
     type: ["", [{ validator: Validators.required }]],
     done: [false, []],
     season: [0, []],
+    episodes: [0, []],
     file: [null, []],
   });
 
@@ -39,7 +42,7 @@ export class NewSerie {
       return;
     }
 
-    const result = await this.serieClient.createSerie({
+    let result = await this.serieClient.createSerie({
       name: value.name,
       type: value.type,
       done: value.done,
@@ -52,6 +55,20 @@ export class NewSerie {
       if (result.status === 422)
         this.formGroup.logLaravelErrors(result.error);
 
+      this.isLoading.set(false);
+      return;
+    }
+
+    const episodes = [];
+    for (let i = 0; i < value.episodes; i++)
+      episodes.push({ name: null });
+
+    result = await this.episodeClient.createEpisodes({
+      serie_id: result.result.id,
+      episodes: episodes
+    });
+
+    if (!result.succeeded) {
       this.isLoading.set(false);
       return;
     }

@@ -4,17 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 
-class Serie extends Model
+class Episode extends Model
 {
-    protected $table = "series";
-
     protected $keyType = 'string';
     public $incrementing = false;
 
-    protected $fillable = ['name', 'type', 'done', 'index', 'season', 'image', 'franchise_id', 'user_id'];
+    protected $fillable = ['name', 'index', 'serie_id', 'user_id'];
 
     public static function booted()
     {
@@ -24,18 +21,13 @@ class Serie extends Model
         });
     }
 
-    public function franchise() : BelongsTo
+    public function serie() : BelongsTo
     {
-        return $this->belongsTo(Franchise::class);
+        return $this->belongsTo(Serie::class);    
     }
 
     public function user() : BelongsTo
     {
-        return $this->belongsTo(User::class);
-    }
-
-    public function episodes() : HasMany
-    {
-        return $this->hasMany(Episode::class);
+        return $this->belongsTo(User::class);    
     }
 }

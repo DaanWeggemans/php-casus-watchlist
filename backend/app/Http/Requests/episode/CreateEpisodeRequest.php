@@ -1,0 +1,31 @@
+<?php
+
+namespace App\Http\Requests\episode;
+
+use Illuminate\Contracts\Validation\ValidationRule;
+use Illuminate\Foundation\Http\FormRequest;
+
+class CreateEpisodeRequest extends FormRequest
+{
+    /**
+     * Determine if the user is authorized to make this request.
+     */
+    public function authorize(): bool
+    {
+        return true;
+    }
+
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, ValidationRule|array<mixed>|string>
+     */
+    public function rules(): array
+    {
+        return [
+            'episodes' => ['required', 'array'],
+            'serie_id' => ['required'],
+            'episodes.*.name' => ['present', 'nullable']
+        ];
+    }
+}

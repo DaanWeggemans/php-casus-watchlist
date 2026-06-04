@@ -10,5 +10,5 @@ export const authorizedGuard: CanActivateFn = async (route, state) => {
     ? await authService.user() !== undefined
     : authService.isAuthorized();
 
-  return !isAuthorized ? true : router.createUrlTree(['/feed']);
+  return isAuthorized ? true : router.createUrlTree(['/login']);
 };

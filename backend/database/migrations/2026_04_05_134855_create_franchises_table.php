@@ -15,9 +15,8 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('name');
             $table->integer('index');
-            $table->uuid('user_id')->index();
+            $table->foreignUuid('user_id')->constrained('users');
             $table->timestamps();
-            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 

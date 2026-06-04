@@ -11,16 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('series', function (Blueprint $table) {
+        Schema::create('episodes', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('name');
-            $table->string('type');
-            $table->boolean('done');
+            $table->string('name')->nullable();
             $table->integer('index');
-            $table->integer('season')->nullable();
-            $table->binary('image')->nullable();
-            $table->foreignUuid('franchise_id')->constrained('franchises');
-            $table->foreignUuid('user_id')->constrained('users');
+            $table->foreignId('serie_id')->constrained('series');
+            $table->foreignId('user_id')->constrained('users');
             $table->timestamps();
         });
     }
@@ -30,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('series');
+        Schema::dropIfExists('episodes');
     }
 };
