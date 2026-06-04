@@ -42,7 +42,7 @@ export class NewSerie {
       return;
     }
 
-    const result = await this.serieClient.createSerie({
+    let result = await this.serieClient.createSerie({
       name: value.name,
       type: value.type,
       done: value.done,
@@ -59,10 +59,19 @@ export class NewSerie {
       return;
     }
 
-    console.log(await this.episodeClient.createEpisodes({
+    const episodes = [];
+    for (let i = 0; i < value.episodes; i++)
+      episodes.push({ name: null });
+
+    result = await this.episodeClient.createEpisodes({
       serie_id: result.result.id,
-      episodes: Array.from({ length: value.episodes }, () => ({ name: null }))
-    }));
+      episodes: episodes
+    });
+
+    if (!result.succeeded) {
+      this.isLoading.set(false);
+      return;
+    }
 
     this.router.navigate([`/watchlist/${franchise_id}`]);
     this.isLoading.set(false);

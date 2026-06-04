@@ -6,7 +6,7 @@ import { handleError } from '../helpers/error';
 import { handleResponse } from '../helpers/response';
 import { CreateFranchiseRequest, EditFranchiseRequest } from '../interfaces/franchise';
 import { CreateSerieRequest, EditSerieRequest } from '../interfaces/serie';
-import { CreateEpisodeRequest } from '../interfaces/episode';
+import { CreateEpisodeRequest, EditEpisodeRequest } from '../interfaces/episode';
 
 export const API_BASE_URL = new InjectionToken<string>("");
 
@@ -302,6 +302,34 @@ export class EpisodeClient {
     };
 
     const request$ = this.http.post(url, body, options).pipe(
+      switchMap((response: any) => handleResponse(response)),
+      catchError((error: HttpErrorResponse) => handleError(error))
+    );
+
+    return await firstValueFrom(request$);
+  }
+
+  async deleteEpisode(id: string) {
+    const url = `${this.baseUrl}/episodes/${id}`;
+    const options: any = {
+      observe: 'response'
+    };
+
+    const request$ = this.http.delete(url, options).pipe(
+      switchMap((response: any) => handleResponse(response)),
+      catchError((error: HttpErrorResponse) => handleError(error))
+    );
+
+    return await firstValueFrom(request$);
+  }
+
+  async editEpisode(id: string, body: EditEpisodeRequest) {
+    const url = `${this.baseUrl}/episodes/${id}`;
+    const options: any = {
+      observe: 'response'
+    };
+
+    const request$ = this.http.put(url, body, options).pipe(
       switchMap((response: any) => handleResponse(response)),
       catchError((error: HttpErrorResponse) => handleError(error))
     );
