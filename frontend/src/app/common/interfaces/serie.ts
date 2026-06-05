@@ -11,5 +11,15 @@ export interface EditSerieRequest {
     name?: string;
     done?: boolean;
     season?: number;
-    image?: File | null
+    image?: File | null;
+}
+
+export interface Serie {
+    id: string;
+    name: string;
+    type: string;
+    done: boolean;
+    season: null;
+    image: null;
+    index: number;
 }

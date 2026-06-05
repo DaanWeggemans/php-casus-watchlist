@@ -25,7 +25,7 @@ export class NewFranchise {
     if (this.isLoading() || !this.formGroup.validate()) return;
     this.isLoading.set(true);
 
-    const value = this.formGroup.value();
+    const value = this.formGroup.value;
     const result = await this.franchiseClient.createFranchise({
       name: value.name
     });

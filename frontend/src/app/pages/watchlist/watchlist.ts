@@ -6,6 +6,7 @@ import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { NewFranchise } from '../../components/franchise/new-franchise/new-franchise';
 import { NewSerie } from '../../components/serie/new-serie/new-serie';
+import { Serie } from '../../common/interfaces/serie';
 
 @Component({
   selector: 'app-watchlist',
@@ -20,8 +21,10 @@ export class Watchlist {
   location = inject(Location);
 
   franchises = signal<Franchise[]>([]);
+  series = signal<any[]>([]);
   isLoading = signal<boolean>(true);
   franchise = signal<Franchise | undefined>(undefined);
+  serie = signal<Serie | undefined>(undefined);
 
   isCreateFranchiseOpen = signal<boolean>(false);
   isCreateSerieOpen = signal<boolean>(false);
@@ -37,10 +40,10 @@ export class Watchlist {
     
     this.franchises.set(response.result);
     this.isLoading.set(false);
-    this.selectUrlFranchise();
+    await this.selectUrlFranchise();
   }
 
-  selectUrlFranchise() {
+  async selectUrlFranchise() {
     const id = this.activatedRoute.snapshot.paramMap.get("id");
     if (!id) return;
 
@@ -50,22 +53,39 @@ export class Watchlist {
       return;
     }
 
-    this.selectFranchise(franchise);
+    await this.selectFranchise(franchise);
   }
 
-  selectFranchise(franchise: Franchise) {
+  async selectFranchise(franchise: Franchise) {
     this.location.go(`/watchlist/${franchise.id}`);
     this.franchise.set(franchise);
+
+    this.isLoading.set(true);
+
+    const response = await this.serieClient.getAllSeriesFromFranchise(franchise.id);
+    if (!response.succeeded) return;
+
+    this.series.set(response.result);
+    this.isLoading.set(false);
   }
 
   closeFranchise() {
     this.location.go(`/watchlist`);
     this.franchise.set(undefined);
+    this.series.set([]);
+  }
+
+  selectSerie(serie: Serie) {
+    this.serie.set(serie);
+  }
+
+  closeSerie() {
+    this.serie.set(undefined);
   }
 
   buttonNew() {
     const result = this.franchise()
-      ? this.toggleCreateSerie()
+      ? this.toggleCreateSerie(undefined)
       : this.toggleCreateFranchise(undefined);
   }
 
@@ -75,7 +95,9 @@ export class Watchlist {
     console.log(franchise);
   }
 
-  toggleCreateSerie() {
+  toggleCreateSerie(serie: Serie | undefined) {
     this.isCreateSerieOpen.set(!this.isCreateSerieOpen());
+    if (serie) this.series.update((value) => [...value, serie]);
+    console.log(serie);
   }
 }

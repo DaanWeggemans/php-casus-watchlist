@@ -69,7 +69,7 @@ export class DetailFranchise implements OnInit {
     if (this.isLoading() || !this.formGroup.validate()) return;
     this.isLoading.set(true);
 
-    const value = this.formGroup.value();
+    const value = this.formGroup.value;
     const result = await this.franchiseClient.editFranchise(this.franchise()!.id, {
       name: value.name,
       index: value.index

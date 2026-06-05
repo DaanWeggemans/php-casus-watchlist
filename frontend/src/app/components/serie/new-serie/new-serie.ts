@@ -3,6 +3,7 @@ import { ReactiveFormsModule, Validators } from '@angular/forms';
 import { EpisodeClient, SerieClient } from '../../../common/clients/clients';
 import { ValidationFormGroup } from '../../../common/helpers/validation-form-group';
 import { ValidationFormgroupError } from '../../../components/validation-formgroup-error/validation-formgroup-error';
+import { Serie } from '../../../common/interfaces/serie';
 
 @Component({
   selector: 'app-new-serie',
@@ -15,7 +16,7 @@ export class NewSerie {
   episodeClient = inject(EpisodeClient);
   serieClient = inject(SerieClient);
 
-  close = output();
+  close = output<Serie | undefined>();
   franchise_id = input<string>();
 
   isLoading = signal<boolean>(false);
@@ -29,20 +30,32 @@ export class NewSerie {
   });
 
   async create() {
+    this.formGroup.errors.set({});
     if (this.isLoading() || !this.formGroup.validate())
       return;
 
     this.isLoading.set(true);
-    const value = this.formGroup.value();
+    const value = this.formGroup.value;
     const file = value.file as File | null;
     const franchise_id = this.franchise_id();
 
     if (!franchise_id) {
-      this.close.emit();
+      this.close.emit(undefined);
       return;
     }
 
-    let result = await this.serieClient.createSerie({
+    if (value.type == "serie" && (value.season < 1 || value.episodes < 1)) {
+      if (value.season < 1)
+        this.formGroup.logError("season", "The season must be at least 1.");
+      
+      if (value.episodes < 1)
+        this.formGroup.logError("episodes", "The amount of episodes must be at least 1.");
+
+      this.isLoading.set(false);
+      return;
+    }
+
+    const response = await this.serieClient.createSerie({
       name: value.name,
       type: value.type,
       done: value.done,
@@ -51,29 +64,26 @@ export class NewSerie {
       franchise_id: franchise_id
     });
 
-    if (!result.succeeded) {
-      if (result.status === 422)
-        this.formGroup.logLaravelErrors(result.error);
+    if (!response.succeeded) {
+      if (response.status === 422)
+        this.formGroup.logLaravelErrors(response.error);
 
       this.isLoading.set(false);
       return;
     }
 
-    const episodes = [];
-    for (let i = 0; i < value.episodes; i++)
-      episodes.push({ name: null });
+    if (value.type == "serie") {
+      const episodes = [];
+      for (let i = 0; i < value.episodes; i++)
+        episodes.push({ name: null });
 
-    result = await this.episodeClient.createEpisodes({
-      serie_id: result.result.id,
-      episodes: episodes
-    });
-
-    if (!result.succeeded) {
-      this.isLoading.set(false);
-      return;
+      await this.episodeClient.createEpisodes({
+        serie_id: response.result.id,
+        episodes: episodes
+      });
     }
 
-    this.close.emit();
+    this.close.emit(response.result);
     this.isLoading.set(false);
   }
 

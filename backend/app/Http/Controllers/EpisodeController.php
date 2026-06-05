@@ -34,6 +34,22 @@ class EpisodeController extends Controller
 
     public function createAll(CreateEpisodeRequest $request)
     {
+        $serie = Serie::select(['user_id', 'type'])
+            ->where('id', $request->input('serie_id'))
+            ->first();
+
+        if ($serie->user_id != $request->user()->id)
+            return response()->json([
+                "code" => 403,
+                "message" => "The user does not have access to the serie."
+            ], 403);
+
+        if ($serie->type == "movie")
+            return response()->json([
+                "code" => 400,
+                "message" => "Episodes cannot be added to a movie."
+            ], 400);
+
         $episodes = $request->array('episodes');
         $count = Episode::where('user_id', $request->user()->id)
             ->where('serie_id', $request->input('serie_id'))

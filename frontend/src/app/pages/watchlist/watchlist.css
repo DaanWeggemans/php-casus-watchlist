@@ -54,7 +54,7 @@ main {
     }
 }
 
-.selected-franchise-container {
+.selected-item-container {
     position: relative;
     transition: 250ms;
     overflow: hidden;
@@ -63,13 +63,13 @@ main {
     &.closed {
         width: 0;
 
-        .selected-franchise {
+        .selected-item {
             position: initial;
         }
     }
 }
 
-.selected-franchise {
+.selected-item {
     background-color: var(--secondary-background);
     border: 2px solid var(--primary-button);
     height: calc(100vh - 8.25rem - 2rem);
