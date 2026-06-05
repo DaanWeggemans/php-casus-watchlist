@@ -12,7 +12,7 @@
             }
         </nav>
         @if (router.url.includes('watchlist')) {
-            <a id="add" [routerLink]="linkButtonNew()">+</a>
+            <a id="add" (click)="buttonNew.emit()">+</a>
         }
     </div>
     <a id="profile" (click)="logout()" [routerLink]="!authService.isAuthorized() ? '/login' : null">

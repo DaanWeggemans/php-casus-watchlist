@@ -77,3 +77,12 @@ main {
     padding: 2rem;
     width: 29rem;
 }
+
+.modal {
+    background-color: rgba(0, 0, 0, 0.2);
+    position: fixed;
+    height: 100vh;
+    width: 100%;
+    left: 0;
+    top: 0;
+}

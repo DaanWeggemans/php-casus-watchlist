@@ -1,10 +1,8 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, input, output, signal } from '@angular/core';
 import { ReactiveFormsModule, Validators } from '@angular/forms';
 import { EpisodeClient, SerieClient } from '../../../common/clients/clients';
 import { ValidationFormGroup } from '../../../common/helpers/validation-form-group';
 import { ValidationFormgroupError } from '../../../components/validation-formgroup-error/validation-formgroup-error';
-import { ActivatedRoute, Router } from '@angular/router';
-import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-new-serie',
@@ -14,10 +12,11 @@ import { firstValueFrom } from 'rxjs';
   styleUrl: './new-serie.css',
 })
 export class NewSerie {
-  activatedRoute = inject(ActivatedRoute);
   episodeClient = inject(EpisodeClient);
   serieClient = inject(SerieClient);
-  router = inject(Router);
+
+  close = output();
+  franchise_id = input<string>();
 
   isLoading = signal<boolean>(false);
   formGroup = new ValidationFormGroup({
@@ -36,9 +35,10 @@ export class NewSerie {
     this.isLoading.set(true);
     const value = this.formGroup.value();
     const file = value.file as File | null;
-    const franchise_id = (await firstValueFrom(this.activatedRoute.paramMap)).get("franchise_id");
+    const franchise_id = this.franchise_id();
+
     if (!franchise_id) {
-      this.router.navigate(['/watchlist']);
+      this.close.emit();
       return;
     }
 
@@ -73,7 +73,7 @@ export class NewSerie {
       return;
     }
 
-    this.router.navigate([`/watchlist/${franchise_id}`]);
+    this.close.emit();
     this.isLoading.set(false);
   }
 

@@ -11,4 +11,5 @@ export interface Franchise {
     id: string;
     name: string;
     index: number;
+    image?: string | null;
 }

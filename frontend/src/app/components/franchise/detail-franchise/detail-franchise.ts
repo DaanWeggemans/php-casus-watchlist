@@ -1,20 +1,20 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
-import { Header } from '../../../components/header/header';
+import { Header } from '../../header/header';
 import { FranchiseClient } from '../../../common/clients/clients';
 import { ReactiveFormsModule, Validators } from '@angular/forms';
 import { Franchise } from '../../../common/interfaces/franchise';
 import { ValidationFormGroup } from '../../../common/helpers/validation-form-group';
-import { ValidationFormgroupError } from '../../../components/validation-formgroup-error/validation-formgroup-error';
+import { ValidationFormgroupError } from '../../validation-formgroup-error/validation-formgroup-error';
 
 @Component({
-  selector: 'app-detail-watchlist',
+  selector: 'app-detail-franchise',
   imports: [Header, ReactiveFormsModule, ValidationFormgroupError],
-  templateUrl: './detail-watchlist.html',
-  styleUrl: './detail-watchlist.css',
+  templateUrl: './detail-franchise.html',
+  styleUrl: './detail-franchise.css',
 })
-export class DetailWatchlist implements OnInit {
+export class DetailFranchise implements OnInit {
   franchiseClient = inject(FranchiseClient);
   activatedRoute = inject(ActivatedRoute);
   router = inject(Router);

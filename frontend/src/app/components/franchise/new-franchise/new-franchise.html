@@ -7,7 +7,7 @@
         </div>
         <div class="actions">
             <input class="action" type="submit" value="Create" [disabled]="isLoading()">
-            <a class="action" routerLink="/watchlist">Back</a>
+            <button class="action" (click)="close.emit(undefined)">Back</button>
         </div>
     </form>
 </div>

@@ -1,19 +1,20 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, output, signal } from '@angular/core';
 import { ReactiveFormsModule, Validators } from '@angular/forms';
 import { FranchiseClient } from '../../../common/clients/clients';
-import { Router, RouterLink } from '@angular/router';
 import { ValidationFormGroup } from '../../../common/helpers/validation-form-group';
-import { ValidationFormgroupError } from '../../../components/validation-formgroup-error/validation-formgroup-error';
+import { ValidationFormgroupError } from '../../validation-formgroup-error/validation-formgroup-error';
+import { Franchise } from '../../../common/interfaces/franchise';
 
 @Component({
-  selector: 'app-new-watchlist',
-  imports: [ReactiveFormsModule, RouterLink, ValidationFormgroupError],
-  templateUrl: './new-watchlist.html',
-  styleUrl: './new-watchlist.css',
+  selector: 'app-new-franchise',
+  imports: [ReactiveFormsModule, ValidationFormgroupError],
+  templateUrl: './new-franchise.html',
+  styleUrl: './new-franchise.css',
 })
-export class NewWatchlist {
-  watchlistClient = inject(FranchiseClient);
-  router = inject(Router);
+export class NewFranchise {
+  franchiseClient = inject(FranchiseClient);
+
+  close = output<Franchise | undefined>();
 
   isLoading = signal<boolean>(false);
   formGroup = new ValidationFormGroup({
@@ -25,7 +26,7 @@ export class NewWatchlist {
     this.isLoading.set(true);
 
     const value = this.formGroup.value();
-    const result = await this.watchlistClient.createFranchise({
+    const result = await this.franchiseClient.createFranchise({
       name: value.name
     });
 
@@ -37,7 +38,7 @@ export class NewWatchlist {
       return;
     }
 
-    this.router.navigate(['/watchlist']);
+    this.close.emit(result.result);
     this.isLoading.set(false);
   }
 }

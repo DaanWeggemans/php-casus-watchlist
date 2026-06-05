@@ -1,5 +1,5 @@
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
-import { Component, inject, input } from '@angular/core';
+import { Component, inject, input, output } from '@angular/core';
 import { AuthService } from '../../common/services/auth-service';
 
 @Component({
@@ -12,7 +12,7 @@ export class Header {
   authService = inject(AuthService);
   router = inject(Router);
 
-  linkButtonNew = input<string>();
+  buttonNew = output();
 
   loggedOut = false;
 

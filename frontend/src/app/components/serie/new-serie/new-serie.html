@@ -1,0 +1,46 @@
+<div class="root">
+    <form class="login" [formGroup]="formGroup.group" (ngSubmit)="create()">
+        <div>
+            <label for="name">Name</label>
+            <input class="input" id="name" type="text" formControlName="name">
+            <validation-formgroup-error [errors]="formGroup.errors()['name']"></validation-formgroup-error>
+        </div>
+        <div>
+            <label for="type">Type</label>
+            <select class="input" id="type" formControlName="type">
+                <option value=""></option>
+                <option value="serie">Serie</option>
+                <option value="movie">Movie</option>
+            </select>
+            <validation-formgroup-error [errors]="formGroup.errors()['type']"></validation-formgroup-error>
+        </div>
+        @if (formGroup.group.get("type")?.value == "serie") {
+            <div class="multiple">
+                <div>
+                    <label for="season">Season</label>
+                    <input class="input" id="season" type="number" formControlName="season">
+                    <validation-formgroup-error [errors]="formGroup.errors()['season']"></validation-formgroup-error>
+                </div>
+                <div>
+                    <label for="episodes">Episodes</label>
+                    <input class="input" id="episodes" type="number" formControlName="episodes">
+                    <validation-formgroup-error [errors]="formGroup.errors()['episodes']"></validation-formgroup-error>
+                </div>
+            </div>
+        }
+        <div>
+            <label for="done">Done Watching?</label>
+            <input class="input" id="done" type="checkbox" formControlName="done">
+            <validation-formgroup-error [errors]="formGroup.errors()['done']"></validation-formgroup-error>
+        </div>
+        <div>
+            <label for="image">Image</label>
+            <input class="input" id="image" type="file" (change)="onFileChange($event)">
+            <validation-formgroup-error [errors]="formGroup.errors()['file']"></validation-formgroup-error>
+        </div>
+        <div class="actions">
+            <input class="action" type="submit" value="Create" [disabled]="isLoading()">
+            <button class="action" (click)="close.emit(undefined)">Back</button>
+        </div>
+    </form>
+</div>

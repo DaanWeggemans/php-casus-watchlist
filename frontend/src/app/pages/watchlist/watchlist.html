@@ -1,17 +1,17 @@
 <div class="root">
-    <app-header [linkButtonNew]="getLink()">Hallo</app-header>
+    <app-header (buttonNew)="buttonNew()"></app-header>
     <main>
         <div class="franchises">
             @if (isLoading()) {
                 <p>Trying to retrieve watchlist...</p>
             }
 
-            @for (item of items(); track item.id) {
-                <button class="franchise" (click)="selectFranchise(item)">
+            @for (franchise of franchises(); track franchise.id) {
+                <button class="franchise" (click)="selectFranchise(franchise)">
                     <div class="image">
-                        <img src="https://static.thenounproject.com/png/3376954-200.png" alt="">
+                        <img [src]="franchise.image ?? 'https://static.thenounproject.com/png/3376954-200.png'" alt="">
                     </div>
-                    <p>{{ item.name }}</p>
+                    <p>{{ franchise.name }}</p>
                 </button>
             }
         </div>
@@ -25,3 +25,14 @@
         </div>
     </main>
 </div>
+@if (isCreateFranchiseOpen()) {
+    <div class="modal">
+        <app-new-franchise (close)="toggleCreateFranchise($event)"></app-new-franchise>
+    </div>
+}
+
+@if (isCreateSerieOpen()) {
+    <div class="modal">
+        <app-new-serie [franchise_id]="franchise()?.id" (close)="toggleCreateSerie()"></app-new-serie>
+    </div>
+}
