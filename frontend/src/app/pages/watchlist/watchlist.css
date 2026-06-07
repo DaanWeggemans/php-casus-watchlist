@@ -53,36 +53,3 @@ main {
         width: 13rem;
     }
 }
-
-.selected-item-container {
-    position: relative;
-    transition: 250ms;
-    overflow: hidden;
-    width: 29rem;
-
-    &.closed {
-        width: 0;
-
-        .selected-item {
-            position: initial;
-        }
-    }
-}
-
-.selected-item {
-    background-color: var(--secondary-background);
-    border: 2px solid var(--primary-button);
-    height: calc(100vh - 8.25rem - 2rem);
-    position: fixed;
-    padding: 2rem;
-    width: 29rem;
-}
-
-.modal {
-    background-color: rgba(0, 0, 0, 0.2);
-    position: fixed;
-    height: 100vh;
-    width: 100%;
-    left: 0;
-    top: 0;
-}

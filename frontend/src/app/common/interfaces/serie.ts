@@ -9,9 +9,11 @@ export interface CreateSerieRequest {
 
 export interface EditSerieRequest {
     name?: string;
+    index?: number;
     done?: boolean;
     season?: number;
     image?: File | null;
+    franchise_id?: string;
 }
 
 export interface Serie {

@@ -1,0 +1,23 @@
+<div class="root">
+    <form class="login" [formGroup]="formGroup.group" (ngSubmit)="create()">
+        <div>
+            <label for="name">Name</label>
+            <input class="input" id="name" type="text" formControlName="name">
+            <validation-formgroup-error [errors]="formGroup.errors()['name']"></validation-formgroup-error>
+        </div>
+        <div>
+            <label for="done">Done Watching?</label>
+            <input class="input" id="done" type="checkbox" formControlName="done">
+            <validation-formgroup-error [errors]="formGroup.errors()['done']"></validation-formgroup-error>
+        </div>
+        <div>
+            <label for="index">Index</label>
+            <input class="input" id="index" type="number" min="1" formControlName="index">
+            <validation-formgroup-error [errors]="formGroup.errors()['index']"></validation-formgroup-error>
+        </div>
+        <div class="actions">
+            <input class="action" type="submit" value="Edit" [disabled]="isLoading()">
+            <button type="button" class="action" (click)="close.emit(undefined)">Back</button>
+        </div>
+    </form>
+</div>

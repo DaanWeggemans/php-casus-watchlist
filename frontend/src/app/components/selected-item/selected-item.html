@@ -1,0 +1,21 @@
+<div [class]="`selected-item-container${item() !== undefined ? '' : ' closed'}`">
+    <div class="selected-item">
+        <div class="selected-header">
+            <h2>{{ item()?.name }}</h2>
+            <button (click)="close.emit()">close</button>
+        </div>
+        <div class="selected-main">
+            @for (episode of episodes() ?? []; track $index) {
+                <button [class]="`selected-episode${episode.done ? ' watched' : ''}`" (click)="openEpisode(episode)">
+                    {{ `EP${episode.index.toString().padStart(3, '0')}` }}
+                </button>
+            }
+        </div>
+    </div>
+</div>
+
+@if (isEditEpisodeOpen()) {
+    <div class="modal">
+        <app-edit-episode [episode]="episode()" [serie_id]="item()?.id" (close)="closeEpisode($event)"></app-edit-episode>
+    </div>
+}

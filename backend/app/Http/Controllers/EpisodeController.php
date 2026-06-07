@@ -57,6 +57,7 @@ class EpisodeController extends Controller
 
         foreach ($episodes as $index => $episode) {
             $episode['index'] = ++$count;
+            $episode['done'] = false;
             $episode['serie_id'] = $request['serie_id'];
             $episode['user_id'] = $request->user()->id;
             $episodes[$index] = Episode::create($episode);
@@ -92,6 +93,11 @@ class EpisodeController extends Controller
 
         if ($request->has('name')) {
             $episode->name = $request['name'];
+            $episode->save();
+        }
+
+        if ($request->has('done')) {
+            $episode->done = $request['done'];
             $episode->save();
         }
 

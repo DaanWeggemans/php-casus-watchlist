@@ -1,30 +1,35 @@
 import { Component, inject, signal } from '@angular/core';
 import { Header } from '../../components/header/header';
-import { FranchiseClient, SerieClient } from '../../common/clients/clients';
+import { EpisodeClient, FranchiseClient, SerieClient } from '../../common/clients/clients';
 import { Franchise } from '../../common/interfaces/franchise';
 import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { NewFranchise } from '../../components/franchise/new-franchise/new-franchise';
 import { NewSerie } from '../../components/serie/new-serie/new-serie';
 import { Serie } from '../../common/interfaces/serie';
+import { SelectedItem } from '../../components/selected-item/selected-item';
+import { Episode } from '../../common/interfaces/episode';
+import { updateArray } from '../../common/helpers/update-array';
 
 @Component({
   selector: 'app-watchlist',
-  imports: [Header, NewFranchise, NewSerie],
+  imports: [Header, NewFranchise, NewSerie, SelectedItem],
   templateUrl: './watchlist.html',
   styleUrl: './watchlist.css',
 })
 export class Watchlist {
   franchiseClient = inject(FranchiseClient);
   activatedRoute = inject(ActivatedRoute);
+  episodeClient = inject(EpisodeClient);
   serieClient = inject(SerieClient);
   location = inject(Location);
 
   franchises = signal<Franchise[]>([]);
-  series = signal<any[]>([]);
-  isLoading = signal<boolean>(true);
   franchise = signal<Franchise | undefined>(undefined);
+  series = signal<Serie[]>([]);
   serie = signal<Serie | undefined>(undefined);
+  episodes = signal<Episode[]>([]);
+  isLoading = signal<boolean>(true);
 
   isCreateFranchiseOpen = signal<boolean>(false);
   isCreateSerieOpen = signal<boolean>(false);
@@ -75,29 +80,59 @@ export class Watchlist {
     this.series.set([]);
   }
 
-  selectSerie(serie: Serie) {
+  async selectSerie(serie: Serie) {
     this.serie.set(serie);
+    this.updateEpisodes();
   }
 
   closeSerie() {
     this.serie.set(undefined);
+    this.episodes.set([]);
   }
 
   buttonNew() {
-    const result = this.franchise()
+    this.franchise() !== undefined
       ? this.toggleCreateSerie(undefined)
       : this.toggleCreateFranchise(undefined);
   }
 
   toggleCreateFranchise(franchise: Franchise | undefined) {
     this.isCreateFranchiseOpen.set(!this.isCreateFranchiseOpen());
-    if (franchise) this.franchises.update((value) => [...value, franchise]);
-    console.log(franchise);
+    if (!franchise) return;
+
+    this.franchises.update((value) => [...value, franchise]);
   }
 
   toggleCreateSerie(serie: Serie | undefined) {
     this.isCreateSerieOpen.set(!this.isCreateSerieOpen());
-    if (serie) this.series.update((value) => [...value, serie]);
-    console.log(serie);
+    if (!serie) return;
+
+    this.series.update((value) => [...value, serie]);
+    if (!serie.image) return;
+
+    this.franchises.update((value) => {
+      const franchise = value.find(franchise => franchise.id === this.franchise()?.id);
+      if (franchise) franchise.image = serie.image;
+
+      return value;
+    });
+  }
+
+  updateEpisode(episode: Episode) {
+    this.episodes.set(updateArray(episode, this.episodes()).sort((a: Episode, b: Episode) => {
+      return a.index - b.index;
+    }));
+  }
+
+  async updateEpisodes() {
+    const serie = this.serie();
+    if (!serie || serie.type !== "serie") return;
+
+    const response = await this.episodeClient.getAllEpisodesFromSerie(serie.id);
+    if (!response.succeeded) return;
+
+    this.episodes.set(response.result.sort((a: Episode, b: Episode) => {
+      return a.index - b.index;
+    }));
   }
 }

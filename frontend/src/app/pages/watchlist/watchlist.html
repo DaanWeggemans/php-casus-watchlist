@@ -38,27 +38,14 @@
             }
         </div>
         @if (serie() === undefined) {
-            <div [class]="`selected-item-container${franchise() !== undefined ? '' : ' closed'}`">
-                <div class="selected-item">
-                    <div class="selected-header">
-                        <h2>{{ franchise()?.name }}</h2>
-                        <button (click)="closeFranchise()">close</button>
-                    </div>
-                </div>
-            </div>
+            <app-selected-item [item]="franchise()" (close)="closeFranchise()"></app-selected-item>
         }
         @else {
-            <div class="selected-item-container">
-                <div class="selected-item">
-                    <div class="selected-header">
-                        <h2>{{ serie()?.name }}</h2>
-                        <button (click)="closeSerie()">close</button>
-                    </div>
-                </div>
-            </div>
+            <app-selected-item [item]="serie()" [episodes]="episodes()" (close)="closeSerie()" (updateEpisode)="updateEpisode($event)"></app-selected-item>
         }
     </main>
 </div>
+
 @if (isCreateFranchiseOpen()) {
     <div class="modal">
         <app-new-franchise (close)="toggleCreateFranchise($event)"></app-new-franchise>

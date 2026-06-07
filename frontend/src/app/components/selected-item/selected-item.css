@@ -1,0 +1,44 @@
+.selected-item-container {
+    position: relative;
+    transition: 250ms;
+    overflow: hidden;
+    width: 29rem;
+
+    &.closed {
+        width: 0;
+
+        .selected-item {
+            position: initial;
+        }
+    }
+}
+
+.selected-item {
+    background-color: var(--secondary-background);
+    border: 2px solid var(--primary-button);
+    height: calc(100vh - 8.25rem - 2rem);
+    justify-content: space-between;
+    flex-direction: column;
+    position: fixed;
+    padding: 2rem;
+    display: flex;
+    width: 29rem;
+}
+
+.selected-main {
+    grid-template-columns: repeat(6, 1fr);
+    display: grid;
+    gap: 0.2rem;
+}
+
+.selected-episode {
+    background-color: var(--primary-button);
+    border-radius: 0.2rem;
+    text-align: center;
+    padding: 0.5rem 0;
+    border: none;
+
+    &:hover, &.watched {
+        background-color: var(--primary-button-hover);
+    }
+}
