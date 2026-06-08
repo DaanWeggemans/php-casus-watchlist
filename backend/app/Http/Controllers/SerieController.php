@@ -29,7 +29,7 @@ class SerieController extends Controller
                 "message" => "The user does not have access to the franchise."
             ], 403);
 
-        return SerieResource::collection($franchise->series);
+        return SerieResource::collection($franchise->series()->orderBy('index')->get());
     }
 
     public function create(CreateSerieRequest $request)

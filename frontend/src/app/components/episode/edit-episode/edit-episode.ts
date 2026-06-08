@@ -37,7 +37,7 @@ export class EditEpisode implements OnInit {
     });
   }
 
-  async create() {
+  async edit() {
     this.formGroup.errors.set({});
     if (this.isLoading() || !this.formGroup.validate())
       return;

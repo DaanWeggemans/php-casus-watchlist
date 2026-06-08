@@ -1,7 +1,5 @@
 <div class="root">
-    <app-header></app-header>
-    <main>
-        <form class="login" [formGroup]="formGroup.group" (ngSubmit)="submit($event)">
+    <form class="login" [formGroup]="formGroup.group" (ngSubmit)="edit()">
         <div>
             <label for="name">Name</label>
             <input class="input" id="name" type="text" formControlName="name">
@@ -10,12 +8,11 @@
         <div>
             <label for="index">Index</label>
             <input class="input" id="index" type="number" min="1" formControlName="index">
-            <validation-formgroup-error [errors]="formGroup.errors()['name']"></validation-formgroup-error>
+            <validation-formgroup-error [errors]="formGroup.errors()['index']"></validation-formgroup-error>
         </div>
         <div class="actions">
-            <input class="action" type="submit" value="Update" [disabled]="isLoading()">
-            <input class="action" type="submit" value="Delete" [disabled]="isLoading()">
+            <input class="action" type="submit" value="Edit" [disabled]="isLoading()">
+            <button type="button" class="action" (click)="close.emit(undefined)">Back</button>
         </div>
     </form>
-    </main>
 </div>

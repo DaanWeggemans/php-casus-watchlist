@@ -62,6 +62,7 @@ export class Watchlist {
   }
 
   async selectFranchise(franchise: Franchise) {
+    this.series.set([]);
     this.location.go(`/watchlist/${franchise.id}`);
     this.franchise.set(franchise);
 
@@ -71,6 +72,7 @@ export class Watchlist {
     if (!response.succeeded) return;
 
     this.series.set(response.result);
+
     this.isLoading.set(false);
   }
 
@@ -81,6 +83,7 @@ export class Watchlist {
   }
 
   async selectSerie(serie: Serie) {
+    this.episodes.set([]);
     this.serie.set(serie);
     this.updateEpisodes();
   }
@@ -118,6 +121,30 @@ export class Watchlist {
     });
   }
 
+  updateFranchise(franchise: Franchise) {
+    this.franchises.set(updateArray(franchise, this.franchises()).sort((a: Franchise, b: Franchise) => {
+      return a.index - b.index;
+    }));
+  }
+
+  updateSerie(serie: Serie) {
+    this.series.set(updateArray(serie, this.series()).sort((a: Serie, b: Serie) => {
+      return a.index - b.index;
+    }));
+
+    if (serie.id != this.series()[this.series().length - 1].id)
+      return;
+
+    this.franchises.update((value) => {
+      return value.map((franchise) => {
+        if (franchise.id == this.franchise()?.id)
+          franchise.image = serie.image;
+
+        return franchise;
+      });
+    });
+  }
+
   updateEpisode(episode: Episode) {
     this.episodes.set(updateArray(episode, this.episodes()).sort((a: Episode, b: Episode) => {
       return a.index - b.index;
@@ -131,8 +158,6 @@ export class Watchlist {
     const response = await this.episodeClient.getAllEpisodesFromSerie(serie.id);
     if (!response.succeeded) return;
 
-    this.episodes.set(response.result.sort((a: Episode, b: Episode) => {
-      return a.index - b.index;
-    }));
+    this.episodes.set(response.result);
   }
 }

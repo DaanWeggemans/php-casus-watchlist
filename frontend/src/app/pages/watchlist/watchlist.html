@@ -38,10 +38,10 @@
             }
         </div>
         @if (serie() === undefined) {
-            <app-selected-item [item]="franchise()" (close)="closeFranchise()"></app-selected-item>
+            <app-selected-item type="Franchise" [item]="franchise()" (close)="closeFranchise()" (updateFranchise)="updateFranchise($event)"></app-selected-item>
         }
         @else {
-            <app-selected-item [item]="serie()" [episodes]="episodes()" (close)="closeSerie()" (updateEpisode)="updateEpisode($event)"></app-selected-item>
+            <app-selected-item type="Serie" [franchise_id]="franchise()?.id" [item]="serie()" [episodes]="episodes()" (close)="closeSerie()" (updateSerie)="updateSerie($event)" (updateEpisode)="updateEpisode($event)"></app-selected-item>
         }
     </main>
 </div>

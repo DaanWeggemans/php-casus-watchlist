@@ -29,7 +29,7 @@ class EpisodeController extends Controller
                 "message" => "The user does not have access to the serie."
             ], 403);
 
-        return EpisodeResource::collection($serie->episodes);
+        return EpisodeResource::collection($serie->episodes()->orderBy('index')->get());
     }
 
     public function createAll(CreateEpisodeRequest $request)

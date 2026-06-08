@@ -1,14 +1,8 @@
 .root {
-    flex-direction: column;
-    min-height: 100vh;
-    display: flex;
-}
-
-main {
     justify-content: center;
     align-items: center;
+    min-height: 100vh;
     display: flex;
-    flex: 1;
 }
 
 .login {
@@ -20,7 +14,7 @@ main {
     display: flex;
     gap: 0.5rem;
 
-    & > div {
+    &>div {
         flex-direction: column;
         display: flex;
     }
@@ -51,9 +45,4 @@ main {
         padding: 1rem;
         flex: 1;
     }
-}
-
-.error {
-    font-size: 0.8rem;
-    color: red;
 }

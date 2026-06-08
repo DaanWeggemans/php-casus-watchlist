@@ -21,7 +21,7 @@ export interface Serie {
     name: string;
     type: string;
     done: boolean;
-    season: null;
-    image: null;
+    season: number | null;
+    image: string | null;
     index: number;
 }

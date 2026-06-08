@@ -1,8 +1,13 @@
 <div [class]="`selected-item-container${item() !== undefined ? '' : ' closed'}`">
     <div class="selected-item">
+        <div class="selected-actions">
+            <button class="selected-action" (click)="openItem()">
+                <img src="/edit-icon.png" alt="Edit">
+            </button>
+            <button class="selected-action" (click)="close.emit()">X</button>
+        </div>
         <div class="selected-header">
             <h2>{{ item()?.name }}</h2>
-            <button (click)="close.emit()">close</button>
         </div>
         <div class="selected-main">
             @for (episode of episodes() ?? []; track $index) {
@@ -13,6 +18,17 @@
         </div>
     </div>
 </div>
+
+@if (isEditItemOpen()) {
+    <div class="modal">
+        @if (type() == 'Franchise') {
+            <app-edit-franchise [franchise]="itemAsFranchise()" (close)="closeItem($event)"></app-edit-franchise>
+        }
+        @else if (type() == 'Serie') {
+            <app-edit-serie [franchise_id]="this.franchise_id()" [serie]="itemAsSerie()" (close)="closeItem($event)"></app-edit-serie>
+        }
+    </div>
+}
 
 @if (isEditEpisodeOpen()) {
     <div class="modal">
