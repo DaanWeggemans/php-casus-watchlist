@@ -75,13 +75,15 @@ export class EditSerie implements OnInit {
       return;
     }
 
+    const newImage = value.file ? await fileToBase64(value.file) : serie.image;
+
     this.close.emit({
       id: serie.id,
       name: value.name,
       type: serie.type,
       done: value.done,
-      season: value.type == "serie" ? value.season : null,
-      image: await fileToBase64(value.file),
+      season: serie.type == "serie" ? value.season : null,
+      image: newImage,
       index: value.index,
     });
 
