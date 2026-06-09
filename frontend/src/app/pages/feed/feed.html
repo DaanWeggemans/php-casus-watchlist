@@ -1,9 +1,12 @@
 <div class="root">
     <app-header></app-header>
     <main>
-        @for (item of [].constructor(4); track $index) {
+        @for (feed of feeds(); track feed.id) {
             <div class="post">
                 <div class="profile"></div>
+                <p>{{ feed.id }}</p>
+                <p>{{ feed.serie.name }}</p>
+                <p>{{ feed.user.username }}</p>
             </div>
         }
     </main>

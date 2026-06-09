@@ -125,6 +125,8 @@ export class Watchlist {
     this.franchises.set(updateArray(franchise, this.franchises()).sort((a: Franchise, b: Franchise) => {
       return a.index - b.index;
     }));
+
+    this.franchise.set(franchise);
   }
 
   updateSerie(serie: Serie) {
@@ -132,17 +134,18 @@ export class Watchlist {
       return a.index - b.index;
     }));
 
-    if (serie.id != this.series()[this.series().length - 1].id)
-      return;
-
     this.franchises.update((value) => {
       return value.map((franchise) => {
-        if (franchise.id == this.franchise()?.id)
-          franchise.image = serie.image;
+        if (franchise.id == this.franchise()?.id) {
+          const series = this.series().filter((serie) => serie.image);
+          franchise.image = series.length ? series[series.length - 1].image : null;
+        }
 
         return franchise;
       });
     });
+
+    this.serie.set(serie);
   }
 
   updateEpisode(episode: Episode) {

@@ -341,3 +341,23 @@ export class EpisodeClient {
     return await firstValueFrom(request$);
   }
 }
+
+@Injectable({ providedIn: 'root' })
+export class FeedClient {
+  baseUrl = inject(API_BASE_URL);
+  http = inject(HttpClient);
+
+  async getFeed() {
+    const url = `${this.baseUrl}/feed`;
+    const options: any = {
+      observe: 'response'
+    };
+
+    const request$ = this.http.get(url, options).pipe(
+      switchMap((response: any) => handleResponse(response)),
+      catchError((error: HttpErrorResponse) => handleError(error))
+    );
+
+    return await firstValueFrom(request$);
+  }
+}
