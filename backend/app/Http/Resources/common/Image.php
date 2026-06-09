@@ -15,7 +15,7 @@ class Image extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $image = $this->resource->image ?? $this->resource['image'] ?? null;
+        $image = data_get($this->resource, 'image');
 
         if ($image) {
             $mimeType = (new finfo(FILEINFO_MIME_TYPE))->buffer($image) ?: "image/jpeg";
