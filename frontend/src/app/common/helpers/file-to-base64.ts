@@ -3,6 +3,7 @@ export async function fileToBase64(file: File): Promise<string | null> {
         const reader = new FileReader();
         reader.onerror = () => resolve(null);
         reader.onload = () => resolve(typeof(reader.result) == 'string' ? reader.result : null);
-        reader.readAsDataURL(file);
+        try { reader.readAsDataURL(file); }
+        catch { resolve(null); }
     });
 }

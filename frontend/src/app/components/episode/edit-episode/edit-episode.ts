@@ -52,11 +52,11 @@ export class EditEpisode implements OnInit {
     const value = this.formGroup.value;
 
     const request: EditEpisodeRequest = { };
-    if ((this.episode()?.name ?? "") != value.name)
+    if ((episode.name ?? "") != value.name)
       request['name'] = value.name.length ? value.name : null;
-    if (this.episode()?.done != value.done)
+    if (episode.done != value.done)
       request['done'] = value.done;
-    if (this.episode()?.index != value.index) {
+    if (episode.index != value.index) {
       request['index'] = value.index;
       request['serie_id'] = this.serie_id()
     }

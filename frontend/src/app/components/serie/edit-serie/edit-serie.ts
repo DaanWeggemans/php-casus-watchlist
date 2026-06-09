@@ -52,17 +52,28 @@ export class EditSerie implements OnInit {
 
     this.isLoading.set(true);
     const value = this.formGroup.value;
+    const request: EditSerieRequest = { };
+    if ((serie.name ?? "") != value.name)
+      request['name'] = value.name.length ? value.name : null;
+    if (serie.type == 'serie' && serie.season != value.season)
+      request['season'] = value.season;
+    if (serie.done != value.done)
+      request['done'] = value.done;
+    if (serie.image == null && value.file != null)
+      request['image'] = value.file;
+    if (serie.index != value.index) {
+      request['index'] = value.index;
+      request['franchise_id'] = this.franchise_id()
+    }
 
-    // const request: EditSerieRequest = { };
+    const response = await this.serieClient.editSerie(serie.id, request);
+    if (!response.succeeded) {
+      if (response.status === 422)
+        this.formGroup.logLaravelErrors(response.error);
 
-    // const response = await this.serieClient.editSerie(serie.id, request);
-    // if (!response.succeeded) {
-    //   if (response.status === 422)
-    //     this.formGroup.logLaravelErrors(response.error);
-
-    //   this.isLoading.set(false);
-    //   return;
-    // }
+      this.isLoading.set(false);
+      return;
+    }
 
     this.close.emit({
       id: serie.id,
