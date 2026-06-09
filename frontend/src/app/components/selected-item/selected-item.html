@@ -10,7 +10,7 @@
             <h2>{{ item()?.name }}</h2>
         </div>
         <div class="selected-main">
-            @for (episode of episodes() ?? []; track $index) {
+            @for (episode of episodes() ?? []; track episode.id) {
                 <button [class]="`selected-episode${episode.done ? ' watched' : ''}`" (click)="openEpisode(episode)">
                     {{ `EP${episode.index.toString().padStart(3, '0')}` }}
                 </button>
