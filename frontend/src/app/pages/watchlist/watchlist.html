@@ -1,27 +1,59 @@
 <div class="root">
-    <app-header [linkButtonNew]="getLink()">Hallo</app-header>
+    <app-header (buttonNew)="buttonNew()"></app-header>
     <main>
         <div class="franchises">
-            @if (isLoading()) {
-                <p>Trying to retrieve watchlist...</p>
-            }
+            @if (!franchise()) {
+                @if (isLoading()) {
+                    <p>Trying to retrieve watchlist...</p>
+                }
+                @else if (!franchises().length) {
+                    <p>No franchises found.</p>
+                }
 
-            @for (item of items(); track item.id) {
-                <button class="franchise" (click)="selectFranchise(item)">
-                    <div class="image">
-                        <img src="https://static.thenounproject.com/png/3376954-200.png" alt="">
-                    </div>
-                    <p>{{ item.name }}</p>
-                </button>
+                @for (franchise of franchises(); track franchise.id) {
+                    <button class="franchise" (click)="selectFranchise(franchise)">
+                        <div class="image">
+                            <img [src]="franchise.image ?? 'https://static.thenounproject.com/png/3376954-200.png'" alt="">
+                        </div>
+                        <p>{{ franchise.name }}</p>
+                    </button>
+                }
+            }
+            @else {
+                @if (isLoading()) {
+                    <p>Trying to retrieve series...</p>
+                }
+                @else if (!series().length) {
+                    <p>No series found.</p>
+                }
+
+                @for (serie of series(); track serie.id) {
+                    <button class="franchise" (click)="selectSerie(serie)">
+                        <div class="image">
+                            <img [src]="serie.image ?? 'https://static.thenounproject.com/png/3376954-200.png'" alt="">
+                        </div>
+                        <p>{{ serie.name }}</p>
+                    </button>
+                }
             }
         </div>
-        <div [class]="`selected-franchise-container${franchise() !== undefined ? '' : ' closed'}`">
-            <div class="selected-franchise">
-                <div class="selected-header">
-                    <h2>{{ franchise()?.name }}</h2>
-                    <button (click)="closeFranchise()">close</button>
-                </div>
-            </div>
-        </div>
+        @if (serie() === undefined) {
+            <app-selected-item type="Franchise" [item]="franchise()" (close)="closeFranchise()" (updateFranchise)="updateFranchise($event)"></app-selected-item>
+        }
+        @else {
+            <app-selected-item type="Serie" [franchise_id]="franchise()?.id" [item]="serie()" [episodes]="episodes()" (close)="closeSerie()" (updateSerie)="updateSerie($event)" (updateEpisode)="updateEpisode($event)"></app-selected-item>
+        }
     </main>
 </div>
+
+@if (isCreateFranchiseOpen()) {
+    <div class="modal">
+        <app-new-franchise (close)="toggleCreateFranchise($event)"></app-new-franchise>
+    </div>
+}
+
+@if (isCreateSerieOpen()) {
+    <div class="modal">
+        <app-new-serie [franchise_id]="franchise()?.id" (close)="toggleCreateSerie($event)"></app-new-serie>
+    </div>
+}

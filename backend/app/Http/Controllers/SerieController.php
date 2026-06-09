@@ -15,7 +15,6 @@ class SerieController extends Controller
     {
         $series = Serie::where('user_id', $request->user()->id)
             ->orderBy('index')
-            ->orderBy('updated_at')
             ->get();
             
         return SerieResource::collection($series);
@@ -29,7 +28,7 @@ class SerieController extends Controller
                 "message" => "The user does not have access to the franchise."
             ], 403);
 
-        return SerieResource::collection($franchise->series);
+        return SerieResource::collection($franchise->series()->orderBy('index')->get());
     }
 
     public function create(CreateSerieRequest $request)

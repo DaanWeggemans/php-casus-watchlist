@@ -252,6 +252,10 @@ export class SerieClient {
       formData.append('image', body.image, body.image.name);
     if (body.image === null)
       formData.append('image', "");
+    if (body.index && body.franchise_id) {
+      formData.append('index', body.index.toString());
+      formData.append('franchise_id', body.franchise_id);
+    }
 
     const request$ = this.http.post(url, formData, options).pipe(
       switchMap((response: any) => handleResponse(response)),

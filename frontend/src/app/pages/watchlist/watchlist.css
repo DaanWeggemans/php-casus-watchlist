@@ -53,27 +53,3 @@ main {
         width: 13rem;
     }
 }
-
-.selected-franchise-container {
-    position: relative;
-    transition: 250ms;
-    overflow: hidden;
-    width: 29rem;
-
-    &.closed {
-        width: 0;
-
-        .selected-franchise {
-            position: initial;
-        }
-    }
-}
-
-.selected-franchise {
-    background-color: var(--secondary-background);
-    border: 2px solid var(--primary-button);
-    height: calc(100vh - 8.25rem - 2rem);
-    position: fixed;
-    padding: 2rem;
-    width: 29rem;
-}

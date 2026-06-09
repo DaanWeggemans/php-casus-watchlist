@@ -14,7 +14,7 @@ export class ValidationFormGroup {
 
     public group!: FormGroup;
     public errors = signal<ObjectArray<string, string[]>>({ });
-    public value = computed(() => this.group.value);
+    public get value() { return this.group.value; }
 
     constructor(object: ValidationValidators) {
         this.keys = Object.keys(object);

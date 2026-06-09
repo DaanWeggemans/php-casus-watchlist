@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('episodes', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('name')->nullable();
+            $table->boolean('done');
             $table->integer('index');
             $table->foreignId('serie_id')->constrained('series');
             $table->foreignId('user_id')->constrained('users');

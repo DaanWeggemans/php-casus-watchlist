@@ -5,6 +5,7 @@ namespace App\Http\Requests\episode;
 use App\Models\Episode;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Validator;
 
 class EditEpisodeRequest extends FormRequest
 {
@@ -28,9 +29,22 @@ class EditEpisodeRequest extends FormRequest
             ->count();
 
         return [
-            'name' => ['required_without:index'],
-            'index' => ['required_without:name', 'integer', "max:$count"],
+            'name' => ['sometimes', 'string', 'nullable'],
+            'done' => ['sometimes', 'boolean'],
+            'index' => ['sometimes', 'integer', "max:$count"],
             'serie_id' => ['required_with:index']
         ];
+    }
+
+    public function withValidator(Validator $validator)
+    {
+        $validator->after(function ($validator) {
+            if (!$this->hasAny(['name', 'done', 'index'])) {
+                $validator->errors()->add(
+                    'request',
+                    'At least one field must be provided.'
+                );
+            }
+        });
     }
 }

@@ -11,7 +11,7 @@ class Episode extends Model
     protected $keyType = 'string';
     public $incrementing = false;
 
-    protected $fillable = ['name', 'index', 'serie_id', 'user_id'];
+    protected $fillable = ['name', 'done', 'index', 'serie_id', 'user_id'];
 
     public static function booted()
     {

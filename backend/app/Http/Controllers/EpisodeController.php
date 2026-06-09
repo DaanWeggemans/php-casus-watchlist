@@ -15,7 +15,6 @@ class EpisodeController extends Controller
     {
         $episodes = Episode::where('user_id', $request->user()->id)
             ->orderBy('index')
-            ->orderBy('updated_at')
             ->get();
 
         return EpisodeResource::collection($episodes);
@@ -29,11 +28,33 @@ class EpisodeController extends Controller
                 "message" => "The user does not have access to the serie."
             ], 403);
 
-        return EpisodeResource::collection($serie->episodes);
+        return EpisodeResource::collection($serie->episodes()->orderBy('index')->get());
     }
 
     public function createAll(CreateEpisodeRequest $request)
     {
+        $serie = Serie::select(['user_id', 'type'])
+            ->where('id', $request->input('serie_id'))
+            ->first();
+
+        if ($serie == null)
+            return response()->json([
+                "code" => 404,
+                "message" => "The serie does not exist."
+            ], 404);
+ 
+        if ($serie->user_id != $request->user()->id)
+            return response()->json([
+                "code" => 403,
+                "message" => "The user does not have access to the serie."
+            ], 403);
+
+        if ($serie->type == "movie")
+            return response()->json([
+                "code" => 400,
+                "message" => "Episodes cannot be added to a movie."
+            ], 400);
+
         $episodes = $request->array('episodes');
         $count = Episode::where('user_id', $request->user()->id)
             ->where('serie_id', $request->input('serie_id'))
@@ -41,6 +62,7 @@ class EpisodeController extends Controller
 
         foreach ($episodes as $index => $episode) {
             $episode['index'] = ++$count;
+            $episode['done'] = false;
             $episode['serie_id'] = $request['serie_id'];
             $episode['user_id'] = $request->user()->id;
             $episodes[$index] = Episode::create($episode);
@@ -76,6 +98,11 @@ class EpisodeController extends Controller
 
         if ($request->has('name')) {
             $episode->name = $request['name'];
+            $episode->save();
+        }
+
+        if ($request->has('done')) {
+            $episode->done = $request['done'];
             $episode->save();
         }
 

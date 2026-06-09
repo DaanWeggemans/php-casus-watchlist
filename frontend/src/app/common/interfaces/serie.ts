@@ -9,7 +9,19 @@ export interface CreateSerieRequest {
 
 export interface EditSerieRequest {
     name?: string;
+    index?: number;
     done?: boolean;
     season?: number;
-    image?: File | null
+    image?: File | null;
+    franchise_id?: string;
+}
+
+export interface Serie {
+    id: string;
+    name: string;
+    type: string;
+    done: boolean;
+    season: number | null;
+    image: string | null;
+    index: number;
 }
