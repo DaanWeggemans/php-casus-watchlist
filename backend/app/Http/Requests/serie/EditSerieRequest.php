@@ -29,7 +29,7 @@ class EditSerieRequest extends FormRequest
             ->count();
 
         return [
-            'name' => ['sometimes'],
+            'name' => ['sometimes', 'string'],
             'index' => ['sometimes', 'integer', "max:$count"],
             'done' => ['sometimes', 'boolean'],
             'season' => ['sometimes', 'required_if:type,serie', 'integer', 'min:1'],

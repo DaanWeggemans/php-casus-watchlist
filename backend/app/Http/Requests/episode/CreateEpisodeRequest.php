@@ -24,8 +24,8 @@ class CreateEpisodeRequest extends FormRequest
     {
         return [
             'episodes' => ['required', 'array'],
-            'serie_id' => ['required'],
-            'episodes.*.name' => ['present', 'nullable']
+            'serie_id' => ['required', 'string'],
+            'episodes.*.name' => ['present', 'string', 'nullable']
         ];
     }
 }

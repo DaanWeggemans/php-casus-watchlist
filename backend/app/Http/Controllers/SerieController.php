@@ -15,7 +15,6 @@ class SerieController extends Controller
     {
         $series = Serie::where('user_id', $request->user()->id)
             ->orderBy('index')
-            ->orderBy('updated_at')
             ->get();
             
         return SerieResource::collection($series);

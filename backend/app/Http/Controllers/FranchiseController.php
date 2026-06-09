@@ -14,7 +14,6 @@ class FranchiseController extends Controller
     {
         $franchises = Franchise::where('user_id', $request->user()->id)
             ->orderBy('index')
-            ->orderBy('updated_at')
             ->get();
 
         return FranchiseResource::collection($franchises);

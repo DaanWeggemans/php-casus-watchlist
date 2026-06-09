@@ -29,7 +29,7 @@ class EditEpisodeRequest extends FormRequest
             ->count();
 
         return [
-            'name' => ['sometimes'],
+            'name' => ['sometimes', 'string', 'nullable'],
             'done' => ['sometimes', 'boolean'],
             'index' => ['sometimes', 'integer', "max:$count"],
             'serie_id' => ['required_with:index']

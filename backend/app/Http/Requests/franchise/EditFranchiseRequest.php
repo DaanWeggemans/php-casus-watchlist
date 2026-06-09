@@ -26,7 +26,7 @@ class EditFranchiseRequest extends FormRequest
         $count = Franchise::where('user_id', $this->user()->id)->count();
 
         return [
-            'name' => ['required_without:index'],
+            'name' => ['required_without:index', 'string'],
             'index' => ['required_without:name', 'integer', 'min:1', "max:$count"]
         ];
     }

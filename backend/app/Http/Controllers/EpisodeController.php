@@ -15,7 +15,6 @@ class EpisodeController extends Controller
     {
         $episodes = Episode::where('user_id', $request->user()->id)
             ->orderBy('index')
-            ->orderBy('updated_at')
             ->get();
 
         return EpisodeResource::collection($episodes);
@@ -38,6 +37,12 @@ class EpisodeController extends Controller
             ->where('id', $request->input('serie_id'))
             ->first();
 
+        if ($serie == null)
+            return response()->json([
+                "code" => 404,
+                "message" => "The serie does not exist."
+            ], 404);
+ 
         if ($serie->user_id != $request->user()->id)
             return response()->json([
                 "code" => 403,

@@ -24,12 +24,12 @@ class CreateSerieRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required'],
+            'name' => ['required', 'string'],
             'type' => ['required', Rule::in(['serie', 'movie'])],
             'done' => ['required', 'boolean'],
             'season' => ['required_if:type,serie', 'integer', 'min:1'],
             'image' => ['image'],
-            'franchise_id' => ['required'],
+            'franchise_id' => ['required', 'string'],
         ];
     }
 }

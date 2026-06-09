@@ -32,7 +32,7 @@ export class SelectedItem {
   itemAsSerie = computed<Serie>(() => this.item() as Serie);
 
   openEpisode(episode: Episode) {
-    this.isEditEpisodeOpen.set(!this.isEditEpisodeOpen());
+    this.isEditEpisodeOpen.set(true);
     this.episode.set(episode);
   }
 
@@ -44,7 +44,7 @@ export class SelectedItem {
 
   openItem() {
     if (this.type() != 'Franchise' && this.type() != 'Serie') return;
-    this.isEditItemOpen.set(!this.isEditItemOpen());
+    this.isEditItemOpen.set(true);
   }
 
   closeItem(item: Franchise | Serie | undefined) {
