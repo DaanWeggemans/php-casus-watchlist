@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('feeds', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignId('serie_id')->constrained('series');
+            $table->foreignUuid('serie_id')->constrained('series');
             $table->foreignUuid('user_id')->constrained('users');
             $table->timestamps();
         });
