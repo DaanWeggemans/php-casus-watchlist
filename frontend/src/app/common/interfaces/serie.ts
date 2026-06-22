@@ -1,3 +1,5 @@
+import { Episode } from "./episode";
+
 export interface CreateSerieRequest {
     name: string;
     type: string;
@@ -24,4 +26,8 @@ export interface Serie {
     season: number | null;
     image: string | null;
     index: number;
+}
+
+export interface DetailSerie extends Serie {
+    episodes: Episode[]
 }

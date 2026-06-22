@@ -6,6 +6,7 @@ namespace App\Models;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -18,6 +19,7 @@ class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
+    use HasUuids;
 
     protected $keyType = 'string';
     public $incrementing = false;
@@ -32,14 +34,6 @@ class User extends Authenticatable
         return [
             'password' => 'hashed',
         ];
-    }
-
-    public static function booted()
-    {
-        static::creating(function ($model) {
-            if (empty($model->id))
-                $model->id = Str::uuid();
-        });
     }
 
     public function franchises() : HasMany

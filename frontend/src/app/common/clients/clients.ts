@@ -4,9 +4,10 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, firstValueFrom, switchMap } from 'rxjs';
 import { handleError } from '../helpers/error';
 import { handleResponse } from '../helpers/response';
-import { CreateFranchiseRequest, EditFranchiseRequest } from '../interfaces/franchise';
-import { CreateSerieRequest, EditSerieRequest } from '../interfaces/serie';
-import { CreateEpisodeRequest, EditEpisodeRequest } from '../interfaces/episode';
+import { CreateFranchiseRequest, EditFranchiseRequest, Franchise } from '../interfaces/franchise';
+import { CreateSerieRequest, EditSerieRequest, Serie } from '../interfaces/serie';
+import { CreateEpisodeRequest, EditEpisodeRequest, Episode } from '../interfaces/episode';
+import { Feeds } from '../interfaces/feed';
 
 export const API_BASE_URL = new InjectionToken<string>("");
 
@@ -98,7 +99,7 @@ export class FranchiseClient {
     };
 
     const request$ = this.http.get(url, options).pipe(
-      switchMap((response: any) => handleResponse(response)),
+      switchMap((response: any) => handleResponse<Franchise[]>(response)),
       catchError((error: HttpErrorResponse) => handleError(error))
     );
 
@@ -174,7 +175,7 @@ export class SerieClient {
     };
 
     const request$ = this.http.get(url, options).pipe(
-      switchMap((response: any) => handleResponse(response)),
+      switchMap((response: any) => handleResponse<Serie[]>(response)),
       catchError((error: HttpErrorResponse) => handleError(error))
     );
 
@@ -188,7 +189,7 @@ export class SerieClient {
     };
 
     const request$ = this.http.get(url, options).pipe(
-      switchMap((response: any) => handleResponse(response)),
+      switchMap((response: any) => handleResponse<Serie[]>(response)),
       catchError((error: HttpErrorResponse) => handleError(error))
     );
 
@@ -278,7 +279,7 @@ export class EpisodeClient {
     };
 
     const request$ = this.http.get(url, options).pipe(
-      switchMap((response: any) => handleResponse(response)),
+      switchMap((response: any) => handleResponse<Episode[]>(response)),
       catchError((error: HttpErrorResponse) => handleError(error))
     );
 
@@ -292,7 +293,7 @@ export class EpisodeClient {
     };
 
     const request$ = this.http.get(url, options).pipe(
-      switchMap((response: any) => handleResponse(response)),
+      switchMap((response: any) => handleResponse<Episode[]>(response)),
       catchError((error: HttpErrorResponse) => handleError(error))
     );
 
@@ -335,6 +336,32 @@ export class EpisodeClient {
 
     const request$ = this.http.put(url, body, options).pipe(
       switchMap((response: any) => handleResponse(response)),
+      catchError((error: HttpErrorResponse) => handleError(error))
+    );
+
+    return await firstValueFrom(request$);
+  }
+}
+
+@Injectable({ providedIn: 'root' })
+export class FeedClient {
+  baseUrl = inject(API_BASE_URL);
+  http = inject(HttpClient);
+
+  async getFeed() {
+    const url = `${this.baseUrl}/feed`;
+    const options: any = {
+      observe: 'response'
+    };
+
+    const request$ = this.http.get(url, options).pipe(
+      switchMap((response: any) => {
+        response.body = response.body.map((x: Feeds) => {
+          x.shared_on = new Date(x.shared_on);
+          return x;
+        });
+        return handleResponse<Feeds[]>(response);
+      }),
       catchError((error: HttpErrorResponse) => handleError(error))
     );
 
