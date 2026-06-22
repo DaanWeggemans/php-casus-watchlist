@@ -19,7 +19,7 @@ export class Followed {
   }
 
   async get() {
-    const response = await this.feedClient.getFeed();
+    const response = await this.feedClient.getFollowedFeed();
     if (!response.succeeded) return;
 
     this.feeds.set(response.result);

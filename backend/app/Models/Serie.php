@@ -31,4 +31,9 @@ class Serie extends Model
     {
         return $this->hasMany(Episode::class);
     }
+
+    public function feeds() : HasMany
+    {
+        return $this->hasMany(Feed::class);
+    }
 }

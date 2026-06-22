@@ -395,13 +395,7 @@ export class FeedClient {
     };
 
     const request$ = this.http.post(url, { followed_user_id }, options).pipe(
-      switchMap((response: any) => {
-        response.body = response.body.map((x: Feeds) => {
-          x.shared_on = new Date(x.shared_on);
-          return x;
-        });
-        return handleResponse<Feeds[]>(response);
-      }),
+      switchMap((response: any) => handleResponse(response)),
       catchError((error: HttpErrorResponse) => handleError(error))
     );
 

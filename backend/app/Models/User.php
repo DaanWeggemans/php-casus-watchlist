@@ -50,4 +50,14 @@ class User extends Authenticatable
     {
         return $this->hasMany(Episode::class);
     }
+
+    public function feeds() : HasMany
+    {
+        return $this->hasMany(Feed::class);
+    }
+
+    public function followed() : HasMany
+    {
+        return $this->hasMany(Followed::class, 'user_id');
+    }
 }

@@ -104,6 +104,18 @@ class EpisodeController extends Controller
         if ($request->has('done')) {
             $episode->done = $request['done'];
             $episode->save();
+
+            $total = Episode::where('user_id', $request->user()->id)
+                ->where('serie_id', $episode->serie_id)
+                ->count();
+
+            $total_done = Episode::where('user_id', $request->user()->id)
+                ->where('serie_id', $episode->serie_id)
+                ->where('done', true)
+                ->count();
+
+            if ($total == $total_done)
+                Serie::where('id', $episode->serie_id)->update(['done' => true]);
         }
 
         if ($request->has('index')) {
