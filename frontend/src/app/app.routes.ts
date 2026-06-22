@@ -4,6 +4,7 @@ import { Login } from './pages/login/login';
 import { Register } from './pages/register/register';
 import { unauthorizedGuard } from './common/guards/unauthorized-guard';
 import { authorizedGuard } from './common/guards/authorized-guard';
+import { Followed } from './pages/followed/followed';
 
 export const routes: Routes = [
     {
@@ -23,6 +24,11 @@ export const routes: Routes = [
     {
         path: "watchlist",
         loadChildren: () => import('./pages/watchlist/watchlist.routes').then((watchlist) => watchlist.routes),
+        canActivate: [authorizedGuard]
+    },
+    {
+        path: "followed",
+        component: Followed,
         canActivate: [authorizedGuard]
     },
     {

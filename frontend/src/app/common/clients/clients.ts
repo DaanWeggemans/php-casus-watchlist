@@ -367,4 +367,58 @@ export class FeedClient {
 
     return await firstValueFrom(request$);
   }
+
+  async getFollowedFeed() {
+    const url = `${this.baseUrl}/feed/followed`;
+    const options: any = {
+      observe: 'response'
+    };
+
+    const request$ = this.http.get(url, options).pipe(
+      switchMap((response: any) => {
+        response.body = response.body.map((x: Feeds) => {
+          x.shared_on = new Date(x.shared_on);
+          return x;
+        });
+        return handleResponse<Feeds[]>(response);
+      }),
+      catchError((error: HttpErrorResponse) => handleError(error))
+    );
+
+    return await firstValueFrom(request$);
+  }
+
+  async createFollowed(followed_user_id: string) {
+    const url = `${this.baseUrl}/feed/followed`;
+    const options: any = {
+      observe: 'response'
+    };
+
+    const request$ = this.http.post(url, { followed_user_id }, options).pipe(
+      switchMap((response: any) => {
+        response.body = response.body.map((x: Feeds) => {
+          x.shared_on = new Date(x.shared_on);
+          return x;
+        });
+        return handleResponse<Feeds[]>(response);
+      }),
+      catchError((error: HttpErrorResponse) => handleError(error))
+    );
+
+    return await firstValueFrom(request$);
+  }
+
+  async removeFollowed(user_id: string) {
+    const url = `${this.baseUrl}/feed/followed/${user_id}`;
+    const options: any = {
+      observe: 'response'
+    };
+
+    const request$ = this.http.delete(url, options).pipe(
+      switchMap((response: any) => handleResponse(response)),
+      catchError((error: HttpErrorResponse) => handleError(error))
+    );
+
+    return await firstValueFrom(request$);
+  }
 }
