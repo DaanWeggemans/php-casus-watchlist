@@ -3,7 +3,7 @@
 namespace App\Http\Resources\feed;
 
 use App\Http\Resources\serie\DetailSerieResource;
-use App\Http\Resources\user\UserResource;
+use App\Http\Resources\user\FollowedUserResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -17,7 +17,7 @@ class FeedResource extends JsonResource
     public function toArray(Request $request): array
     {
         $serie = (new DetailSerieResource($this->resource->serie))->resolve();
-        $user = (new UserResource($this->resource->user))->resolve();
+        $user = (new FollowedUserResource($this->resource->user))->resolve();
 
         return [
             'id' => $this->id,

@@ -1,12 +1,50 @@
 <div class="root">
     <app-header></app-header>
     <main>
+        @if (!feeds().length) {
+            @if (isLoading()) {
+                <p>Loading...</p>
+            } @else {
+                <p>Nothing found on the feed.</p>
+            }
+        }
         @for (feed of feeds(); track feed.id) {
             <div class="post">
-                <div class="profile"></div>
-                <p>{{ feed.id }}</p>
-                <p>{{ feed.serie.name }}</p>
-                <p>{{ feed.user.username }}</p>
+                <div class="profile">
+                    <div class="top">
+                        <div class="profile-icon"></div>
+                        <div class="username">{{ feed.user.username }}</div>
+                        <div class="date-shared">
+                            <span>Posted on: </span>
+                            <span>{{ toReadable(feed.shared_on) }}</span>
+                        </div>
+                    </div>
+                    <div class="bottom">
+                        @if (authService.isAuthorized() && user()?.id != feed.user.id) {
+                            <button class="follow-button" [class.followed]="feed.user.is_followed" (click)="toggleFollow(feed)">{{ feed.user.is_followed ? "Unfollow" : "Follow" }}</button>
+                        }
+                    </div>
+                </div>
+                <div class="content">
+                    <div class="information">
+                        <div class="top">
+                            <h2 class="title">{{ feed.user.username }} has shared a {{ feed.serie.type }}: {{ feed.serie.name }}</h2>
+                            @if (feed.serie.done) {
+                                <p>{{ feed.user.username }} has finished {{ feed.serie.name }}</p>
+                            }
+                        </div>
+                        <div class="bottom">
+                            @if (feed.serie.type == "serie") {
+                                @for (episode of feed.serie.episodes; track episode.id) {
+                                    <p class="episode" [class.is-done]="episode.done">{{ episode.index }}</p>
+                                }
+                            }
+                        </div>
+                    </div>
+                    <div class="cover">
+                        <img [src]="feed.serie.image ?? 'https://static.thenounproject.com/png/3376954-200.png'" [alt]="feed.serie.name">
+                    </div>
+                </div>
             </div>
         }
     </main>

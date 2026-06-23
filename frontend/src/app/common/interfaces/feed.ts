@@ -1,9 +1,9 @@
 import { DetailSerie } from "./serie";
-import { User } from "./user";
+import { FollowedUser } from "./user";
 
 export interface Feeds {
     id: string,
     serie: DetailSerie,
-    user: User,
+    user: FollowedUser,
     shared_on: Date,
 }

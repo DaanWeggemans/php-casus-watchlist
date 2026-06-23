@@ -3,3 +3,7 @@ export interface User {
     username: string;
     email: string;
 }
+
+export interface FollowedUser extends User {
+    is_followed: boolean;
+}

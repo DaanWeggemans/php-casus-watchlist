@@ -1,6 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { Header } from '../../components/header/header';
-import { EpisodeClient, FranchiseClient, SerieClient } from '../../common/clients/clients';
+import { EpisodeClient, FeedClient, FranchiseClient, SerieClient } from '../../common/clients/clients';
 import { Franchise } from '../../common/interfaces/franchise';
 import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
@@ -18,10 +18,11 @@ import { updateArray } from '../../common/helpers/update-array';
   styleUrl: './watchlist.css',
 })
 export class Watchlist {
-  franchiseClient = inject(FranchiseClient);
+  private readonly franchiseClient = inject(FranchiseClient);
+  private readonly episodeClient = inject(EpisodeClient);
+  private readonly serieClient = inject(SerieClient);
+  private readonly feedClient = inject(FeedClient);
   activatedRoute = inject(ActivatedRoute);
-  episodeClient = inject(EpisodeClient);
-  serieClient = inject(SerieClient);
   location = inject(Location);
 
   franchises = signal<Franchise[]>([]);
@@ -162,5 +163,28 @@ export class Watchlist {
     if (!response.succeeded) return;
 
     this.episodes.set(response.result);
+  }
+
+  async toggleVisibility() {
+    const serie = this.serie();
+    if (!serie || serie.type !== "serie") return;
+
+    const response = serie.is_shared
+      ? await this.feedClient.removeFeed(serie.id)
+      : await this.feedClient.createFeed(serie.id);
+
+    if (!response.succeeded) return;
+    const is_shared = !serie.is_shared;
+
+    this.series.update((array) => {
+      return array.map(x => (x.id == serie.id)
+        ? { ...x, is_shared: is_shared }
+        : x);
+    });
+
+    this.serie.set({
+      ...serie,
+      is_shared: is_shared
+    });
   }
 }
