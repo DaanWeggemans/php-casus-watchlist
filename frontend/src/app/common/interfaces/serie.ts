@@ -26,6 +26,7 @@ export interface Serie {
     season: number | null;
     image: string | null;
     index: number;
+    is_shared?: boolean;
 }
 
 export interface DetailSerie extends Serie {

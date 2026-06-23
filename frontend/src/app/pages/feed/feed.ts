@@ -2,6 +2,8 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { Header } from '../../components/header/header';
 import { FeedClient } from '../../common/clients/clients';
 import { Feeds } from '../../common/interfaces/feed';
+import { AuthService } from '../../common/services/auth-service';
+import { User } from '../../common/interfaces/user';
 
 @Component({
   selector: 'app-feed',
@@ -11,10 +13,14 @@ import { Feeds } from '../../common/interfaces/feed';
 })
 export class Feed implements OnInit {
   private readonly feedClient = inject(FeedClient);
+  readonly authService = inject(AuthService);
 
   feeds = signal<Feeds[]>([]);
+  isLoading = signal<boolean>(true);
+  user = signal<User | undefined>(undefined);
 
   ngOnInit() {
+    this.getUser();
     this.get();
   }
 
@@ -23,6 +29,12 @@ export class Feed implements OnInit {
     if (!response.succeeded) return;
 
     this.feeds.set(response.result);
+    this.isLoading.set(false);
+  }
+
+  async getUser() {
+    const user = await this.authService.user();
+    this.user.set(user);
   }
 
   toReadable(date: Date) {

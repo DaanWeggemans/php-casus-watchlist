@@ -20,6 +20,7 @@ export class SelectedItem {
   franchise_id = input<string>();
 
   close = output();
+  toggleVisibility = output();
   updateSerie = output<Serie>();
   updateFranchise = output<Franchise>();
   updateEpisode = output<Episode>();
@@ -43,6 +44,7 @@ export class SelectedItem {
   }
 
   openItem() {
+    console.log(this.itemAsSerie());
     if (this.type() != 'Franchise' && this.type() != 'Serie') return;
     this.isEditItemOpen.set(true);
   }

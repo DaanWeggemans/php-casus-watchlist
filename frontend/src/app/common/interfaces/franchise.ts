@@ -12,4 +12,5 @@ export interface Franchise {
     name: string;
     index: number;
     image?: string | null;
+    is_shared?: boolean;
 }

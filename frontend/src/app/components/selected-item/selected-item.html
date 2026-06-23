@@ -1,6 +1,11 @@
 <div [class]="`selected-item-container${item() !== undefined ? '' : ' closed'}`">
     <div class="selected-item">
         <div class="selected-actions">
+            @if (type() == 'Serie') {
+                <button class="selected-action" (click)="toggleVisibility.emit()">
+                    <img [src]="item()?.is_shared ? '/set-to-public-icon.png' : '/set-to-private-icon.png'" alt="Edit">
+                </button>
+            }
             <button class="selected-action" (click)="openItem()">
                 <img src="/edit-icon.png" alt="Edit">
             </button>

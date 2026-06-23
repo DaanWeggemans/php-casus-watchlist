@@ -91,3 +91,29 @@ main {
 .title {
     font-size: 1.4rem;
 }
+
+.information {
+    justify-content: space-between;
+    flex-direction: column;
+    display: flex;
+}
+
+.information .bottom {
+    scrollbar-color: var(--primary-button) var(--secondary-background);
+    grid-template-columns: repeat(6, 1fr);
+    scrollbar-width: thin;
+    overflow-y: scroll;
+    max-height: 80px;
+    display: grid;
+    gap: 0.2rem;
+}
+
+.episode {
+    background-color: var(--primary-button);
+    text-align: center;
+    padding: 0.1rem;
+}
+
+.episode.is-done {
+    background-color: var(--primary-button-hover);
+}
