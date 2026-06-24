@@ -37,14 +37,6 @@ export class Feed implements OnInit {
     this.user.set(user);
   }
 
-  toReadable(date: Date) {
-    const day = date.getDay().toString().padStart(2, '0');
-    const month = date.getMonth().toString().padStart(2, '0');
-    const year = date.getFullYear();
-
-    return `${day}-${month}-${year}`;
-  }
-
   async toggleFollow(feed: Feeds) {
     const response = feed.user.is_followed
       ? await this.feedClient.removeFollowed(feed.user.id)
@@ -64,5 +56,13 @@ export class Feed implements OnInit {
 
   getDescription(feed: Feeds) {
     return `${ feed.user.username } has finished ${ feed.serie.name }`;
+  }
+
+  toReadable(date: Date) {
+    const day = date.getDay().toString().padStart(2, '0');
+    const month = date.getMonth().toString().padStart(2, '0');
+    const year = date.getFullYear();
+
+    return `${day}-${month}-${year}`;
   }
 }
