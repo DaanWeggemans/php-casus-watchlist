@@ -42,9 +42,17 @@ export class Followed {
 
     if (!response.succeeded) return;
     this.feeds.update((array) => array.map(x => {
-      if (x.id != feed.id) return x;
+      if (x.user.id != feed.user.id) return x;
       x.user.is_followed = !x.user.is_followed;
       return x;
     }).filter(x => x.user.is_followed));
+  }
+
+  getTitle(feed: Feeds) {
+    return `${ feed.user.username } has shared a ${ feed.serie.type }: ${ feed.serie.name }`;
+  }
+
+  getDescription(feed: Feeds) {
+    return `${ feed.user.username } has finished ${ feed.serie.name }`;
   }
 }
