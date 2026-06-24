@@ -41,6 +41,9 @@ export class Watchlist {
     this.getAllFranchises();
   }
 
+  /**
+   * Franchises
+   */
   async getAllFranchises() {
     const response = await this.franchiseClient.getAllFranchises();
     if (!response.succeeded)
@@ -79,16 +82,46 @@ export class Watchlist {
     this.isLoading.set(false);
   }
 
+  updateFranchise(franchise: Franchise) {
+    this.franchises.set(updateArray(franchise, this.franchises()).sort((a: Franchise, b: Franchise) => {
+      return a.index - b.index;
+    }));
+
+    this.franchise.set(franchise);
+  }
+
   closeFranchise() {
     this.location.go(`/watchlist`);
     this.franchise.set(undefined);
     this.series.set([]);
   }
 
+  /**
+   * Series
+   */
   async selectSerie(serie: Serie) {
     this.episodes.set([]);
     this.serie.set(serie);
     this.updateEpisodes();
+  }
+
+  updateSerie(serie: Serie) {
+    this.series.set(updateArray(serie, this.series()).sort((a: Serie, b: Serie) => {
+      return a.index - b.index;
+    }));
+
+    this.franchises.update((value) => {
+      return value.map((franchise) => {
+        if (franchise.id == this.franchise()?.id) {
+          const series = this.series().filter((serie) => serie.image);
+          franchise.image = series.length ? series[series.length - 1].image : null;
+        }
+
+        return franchise;
+      });
+    });
+
+    this.serie.set(serie);
   }
 
   closeSerie() {
@@ -96,12 +129,65 @@ export class Watchlist {
     this.episodes.set([]);
   }
 
+  /**
+   * Franchises & Series
+   */
+  async deleteItem() {
+    const franchise = this.franchise();
+    const serie = this.serie();
+
+    const response = franchise != undefined && serie == undefined
+      ? await this.franchiseClient.deleteFranchise(franchise.id)
+      : (serie != undefined
+        ? await this.serieClient.deleteSerie(serie.id)
+        : null);
+
+    if (response == null || !response.succeeded) return;
+
+    if (franchise != undefined && serie == undefined) {
+      this.franchises.set(updateArray(undefined, this.franchises().filter(x => x.id != franchise.id)));
+      this.closeFranchise();
+    } else if (serie != undefined) {
+      this.series.set(updateArray(undefined, this.series().filter(x => x.id != serie.id)));
+      this.closeSerie();
+    }
+  }
+
+  /**
+   * Episodes
+   */
+  updateEpisode(episode: Episode) {
+    this.episodes.set(updateArray(episode, this.episodes()).sort((a: Episode, b: Episode) => {
+      return a.index - b.index;
+    }));
+  }
+
+  async updateEpisodes() {
+    const serie = this.serie();
+    if (!serie || serie.type !== "serie") return;
+
+    const response = await this.episodeClient.getAllEpisodesFromSerie(serie.id);
+    if (!response.succeeded) return;
+
+    this.episodes.set(response.result);
+  }
+
+  deleteEpisode(episode: Episode) {
+    this.episodes.set(updateArray(undefined, this.episodes()?.filter(x => x.id != episode?.id)));
+  }
+
+  /**
+   * Header (+) button
+   */
   buttonNew() {
     this.franchise() !== undefined
       ? this.toggleCreateSerie(undefined)
       : this.toggleCreateFranchise(undefined);
   }
 
+  /**
+   * Modal toggles
+   */
   toggleCreateFranchise(franchise: Franchise | undefined) {
     this.isCreateFranchiseOpen.set(!this.isCreateFranchiseOpen());
     if (!franchise) return;
@@ -131,53 +217,9 @@ export class Watchlist {
     this.episodes.set(updateArray(undefined, [...this.episodes(), ...episodes]));
   }
 
-  updateFranchise(franchise: Franchise) {
-    this.franchises.set(updateArray(franchise, this.franchises()).sort((a: Franchise, b: Franchise) => {
-      return a.index - b.index;
-    }));
-
-    this.franchise.set(franchise);
-  }
-
-  updateSerie(serie: Serie) {
-    this.series.set(updateArray(serie, this.series()).sort((a: Serie, b: Serie) => {
-      return a.index - b.index;
-    }));
-
-    this.franchises.update((value) => {
-      return value.map((franchise) => {
-        if (franchise.id == this.franchise()?.id) {
-          const series = this.series().filter((serie) => serie.image);
-          franchise.image = series.length ? series[series.length - 1].image : null;
-        }
-
-        return franchise;
-      });
-    });
-
-    this.serie.set(serie);
-  }
-
-  updateEpisode(episode: Episode) {
-    this.episodes.set(updateArray(episode, this.episodes()).sort((a: Episode, b: Episode) => {
-      return a.index - b.index;
-    }));
-  }
-
-  deleteEpisode(episode: Episode) {
-    this.episodes.set(updateArray(undefined, this.episodes()?.filter(x => x.id != episode?.id)));
-  }
-
-  async updateEpisodes() {
-    const serie = this.serie();
-    if (!serie || serie.type !== "serie") return;
-
-    const response = await this.episodeClient.getAllEpisodesFromSerie(serie.id);
-    if (!response.succeeded) return;
-
-    this.episodes.set(response.result);
-  }
-
+  /**
+   * Share series
+   */
   async toggleVisibility() {
     const serie = this.serie();
     if (!serie || serie.type !== "serie") return;
@@ -199,26 +241,5 @@ export class Watchlist {
       ...serie,
       is_shared: is_shared
     });
-  }
-
-  async deleteItem() {
-    const franchise = this.franchise();
-    const serie = this.serie();
-
-    const response = franchise != undefined && serie == undefined
-      ? await this.franchiseClient.deleteFranchise(franchise.id)
-      : (serie != undefined
-        ? await this.serieClient.deleteSerie(serie.id)
-        : null);
-
-    if (response == null || !response.succeeded) return;
-
-    if (franchise != undefined && serie == undefined) {
-      this.franchises.set(updateArray(undefined, this.franchises().filter(x => x.id != franchise.id)));
-      this.closeFranchise();
-    } else if (serie != undefined) {
-      this.series.set(updateArray(undefined, this.series().filter(x => x.id != serie.id)));
-      this.closeSerie();
-    }
   }
 }

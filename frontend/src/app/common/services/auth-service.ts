@@ -26,24 +26,24 @@ export class AuthService {
     }
 
     async user() {
-        if (this._user) {
+        if (this._user)
             return this._user;
-        } else {
-            const result = await this.authClient.user();
-            if (result.succeeded) {
-                this.isAuthorized.set(true);
-                const user = result.result;
-                this._user = {
-                    id: user.id,
-                    username: user.username,
-                    email: user.email
-                };
-            } else {
-                this.isAuthorized.set(false);
-                this._user = undefined;
-            }
+            
+        const result = await this.authClient.user();
+        if (!result.succeeded) {
+            this.reset(false);
             return this._user;
         }
+
+        this.isAuthorized.set(true);
+        const user = result.result;
+        this._user = {
+            id: user.id,
+            username: user.username,
+            email: user.email
+        };
+
+        return this._user;
     }
 
     async logout() {
