@@ -1,9 +1,9 @@
 <div class="root">
     <form class="login" [formGroup]="formGroup.group" (ngSubmit)="create()">
         <div>
-            <label for="name">Name</label>
-            <input class="input" id="name" type="text" formControlName="name">
-            <validation-formgroup-error [errors]="formGroup.errors()['name']"></validation-formgroup-error>
+            <label for="episodes">Amount of new episodes</label>
+            <input class="input" id="episodes" type="number" formControlName="episodes">
+            <validation-formgroup-error [errors]="formGroup.errors()['episodes']"></validation-formgroup-error>
         </div>
         <div class="actions">
             <button class="action" type="submit" [disabled]="isLoading()">+</button>

@@ -61,6 +61,12 @@ export class ValidationFormGroup {
                     const length = control.errors?.['minlength']?.requiredLength ?? "N/A";
                     this.logError(key, validator?.message ?? `The ${key} must be at least ${length} characters long.`);
                 }
+                
+                if (errors.includes("min")) {
+                    const validator = this.object[key][1].find(x => x.validator.name == "min");
+                    const length = control.errors?.['min']?.min ?? "N/A";
+                    this.logError(key, validator?.message ?? `The ${key} must be at least ${length}.`);
+                }
             }
         });
 

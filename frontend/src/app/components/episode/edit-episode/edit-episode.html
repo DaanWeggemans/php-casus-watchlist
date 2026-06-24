@@ -16,8 +16,13 @@
             <validation-formgroup-error [errors]="formGroup.errors()['index']"></validation-formgroup-error>
         </div>
         <div class="actions">
-            <input class="action" type="submit" value="Edit" [disabled]="isLoading()">
-            <button type="button" class="action" (click)="close.emit(undefined)">Back</button>
+            <button class="action" type="submit" [disabled]="isLoading()">
+                <img src="/edit-icon.png" alt="Edit">
+            </button>
+            <button class="action" type="button" (click)="delete()" [disabled]="isLoading()">
+                <img src="/delete-icon.png" alt="Delete">
+            </button>
+            <button class="action" type="button" (click)="close.emit(undefined)">X</button>
         </div>
     </form>
 </div>

@@ -13,11 +13,12 @@ import { EditEpisodeRequest, Episode } from '../../../common/interfaces/episode'
   styleUrl: './edit-episode.css',
 })
 export class EditEpisode implements OnInit {
-  episodeClient = inject(EpisodeClient);
+  private readonly episodeClient = inject(EpisodeClient);
 
   episode = input<Episode>();
   serie_id = input<string>();
   close = output<Episode | undefined>();
+  closeAndDelete = output();
 
   isLoading = signal<boolean>(false);
   formGroup = new ValidationFormGroup({
@@ -77,6 +78,24 @@ export class EditEpisode implements OnInit {
       index: value.index,
     });
 
+    this.isLoading.set(false);
+  }
+
+  async delete() {
+    if (this.isLoading() || !confirm("Are you sure you want to delete this episode?"))
+      return;
+
+    const episode = this.episode();
+    if (!episode) {
+      this.close.emit(undefined);
+      return;
+    }
+
+    this.isLoading.set(true);
+    const response = await this.episodeClient.deleteEpisode(episode.id);
+    if (!response.succeeded) return;
+
+    this.closeAndDelete.emit();
     this.isLoading.set(false);
   }
 }

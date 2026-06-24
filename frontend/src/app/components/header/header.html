@@ -16,6 +16,11 @@
         }
     </div>
     <a id="profile" (click)="logout()" [routerLink]="!authService.isAuthorized() ? '/login' : null">
-        <div></div>
+        @if (authService._user) {
+            <div class="username">
+                <p>{{ authService._user.username }}</p>
+            </div>
+        }
+        <div class="profile-icon"></div>
     </a>
 </header>

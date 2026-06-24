@@ -10,10 +10,11 @@ import { Serie } from '../../common/interfaces/serie';
 import { SelectedItem } from '../../components/selected-item/selected-item';
 import { Episode } from '../../common/interfaces/episode';
 import { updateArray } from '../../common/helpers/update-array';
+import { NewEpisode } from '../../components/episode/new-episode/new-episode';
 
 @Component({
   selector: 'app-watchlist',
-  imports: [Header, NewFranchise, NewSerie, SelectedItem],
+  imports: [Header, NewFranchise, NewSerie, NewEpisode, SelectedItem],
   templateUrl: './watchlist.html',
   styleUrl: './watchlist.css',
 })
@@ -34,6 +35,7 @@ export class Watchlist {
 
   isCreateFranchiseOpen = signal<boolean>(false);
   isCreateSerieOpen = signal<boolean>(false);
+  isCreateEpisodeOpen = signal<boolean>(false);
 
   ngOnInit() {
     this.getAllFranchises();
@@ -122,6 +124,13 @@ export class Watchlist {
     });
   }
 
+  toggleCreateEpisode(episodes: Episode[] | undefined) {
+    this.isCreateEpisodeOpen.set(!this.isCreateEpisodeOpen());
+    if (!episodes) return;
+
+    this.episodes.set(updateArray(undefined, [...this.episodes(), ...episodes]));
+  }
+
   updateFranchise(franchise: Franchise) {
     this.franchises.set(updateArray(franchise, this.franchises()).sort((a: Franchise, b: Franchise) => {
       return a.index - b.index;
@@ -155,6 +164,10 @@ export class Watchlist {
     }));
   }
 
+  deleteEpisode(episode: Episode) {
+    this.episodes.set(updateArray(undefined, this.episodes()?.filter(x => x.id != episode?.id)));
+  }
+
   async updateEpisodes() {
     const serie = this.serie();
     if (!serie || serie.type !== "serie") return;
@@ -186,5 +199,26 @@ export class Watchlist {
       ...serie,
       is_shared: is_shared
     });
+  }
+
+  async deleteItem() {
+    const franchise = this.franchise();
+    const serie = this.serie();
+
+    const response = franchise != undefined && serie == undefined
+      ? await this.franchiseClient.deleteFranchise(franchise.id)
+      : (serie != undefined
+        ? await this.serieClient.deleteSerie(serie.id)
+        : null);
+
+    if (response == null || !response.succeeded) return;
+
+    if (franchise != undefined && serie == undefined) {
+      this.franchises.set(updateArray(undefined, this.franchises().filter(x => x.id != franchise.id)));
+      this.closeFranchise();
+    } else if (serie != undefined) {
+      this.series.set(updateArray(undefined, this.series().filter(x => x.id != serie.id)));
+      this.closeSerie();
+    }
   }
 }
