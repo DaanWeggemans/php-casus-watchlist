@@ -1,6 +1,9 @@
-export function updateArray<TValue extends { id: string, index: number }>(value: TValue, array: TValue[]) {
-    const old_value = array.find(x => x.id == value.id);
-    if (!old_value) return array;
+export function updateArray<TValue extends { id: string, index: number }>(value: TValue | undefined, array: TValue[]) {
+    const old_value = array.find(x => x.id == value?.id);
+    if (!value || !old_value) return array.sort((a: TValue, b: TValue) => a.index - b.index).map((item: TValue, index: number) => ({
+        ...item,
+        index: index + 1
+    }));
 
     return array.map((item: TValue) => {
         if (item.id == value.id)

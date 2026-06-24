@@ -33,17 +33,24 @@
 
 .actions {
     flex-direction: row !important;
-    gap: 1rem;
+    justify-content: end;
+    gap: 5px;
 
     .action {
-        border: 1px solid var(--secondary-button);
         background-color: var(--primary-button);
-        border-radius: 0.4rem;
-        text-align: center;
-        font-size: 0.8rem;
-        cursor: pointer;
-        padding: 1rem;
-        flex: 1;
+        border-radius: 0.2rem;
+        padding: 10px;
+        height: 50px;
+        border: none;
+        width: 50px;
+
+        &:hover {
+            background-color: var(--primary-button-hover);
+        }
+
+        img {
+            width: 100%;
+        }
     }
 }
 

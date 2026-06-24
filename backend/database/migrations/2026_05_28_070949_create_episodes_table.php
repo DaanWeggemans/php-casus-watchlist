@@ -16,8 +16,8 @@ return new class extends Migration
             $table->string('name')->nullable();
             $table->boolean('done');
             $table->integer('index');
-            $table->foreignUuid('serie_id')->constrained('series');
-            $table->foreignUuid('user_id')->constrained('users');
+            $table->foreignUuid('serie_id')->constrained('series')->onDelete('cascade');
+            $table->foreignUuid('user_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

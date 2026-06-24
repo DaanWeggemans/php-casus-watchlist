@@ -155,6 +155,10 @@ export class Watchlist {
     }));
   }
 
+  deleteEpisode(episode: Episode) {
+    this.episodes.set(updateArray(undefined, this.episodes()?.filter(x => x.id != episode?.id)));
+  }
+
   async updateEpisodes() {
     const serie = this.serie();
     if (!serie || serie.type !== "serie") return;
@@ -186,5 +190,26 @@ export class Watchlist {
       ...serie,
       is_shared: is_shared
     });
+  }
+
+  async deleteItem() {
+    const franchise = this.franchise();
+    const serie = this.serie();
+
+    const response = franchise != undefined && serie == undefined
+      ? await this.franchiseClient.deleteFranchise(franchise.id)
+      : (serie != undefined
+        ? await this.serieClient.deleteSerie(serie.id)
+        : null);
+
+    if (response == null || !response.succeeded) return;
+
+    if (franchise != undefined && serie == undefined) {
+      this.franchises.set(updateArray(undefined, this.franchises().filter(x => x.id != franchise.id)));
+      this.closeFranchise();
+    } else if (serie != undefined) {
+      this.series.set(updateArray(undefined, this.series().filter(x => x.id != serie.id)));
+      this.closeSerie();
+    }
   }
 }

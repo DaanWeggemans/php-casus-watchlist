@@ -3,9 +3,12 @@
         <div class="selected-actions">
             @if (type() == 'Serie') {
                 <button class="selected-action" (click)="toggleVisibility.emit()">
-                    <img [src]="item()?.is_shared ? '/set-to-public-icon.png' : '/set-to-private-icon.png'" alt="Edit">
+                    <img [src]="item()?.is_shared ? '/set-to-public-icon.png' : '/set-to-private-icon.png'" alt="Visibility">
                 </button>
             }
+            <button class="selected-action" (click)="deleteItem.emit()">
+                <img src="/delete-icon.png" alt="Delete">
+            </button>
             <button class="selected-action" (click)="openItem()">
                 <img src="/edit-icon.png" alt="Edit">
             </button>
@@ -37,6 +40,6 @@
 
 @if (isEditEpisodeOpen()) {
     <div class="modal">
-        <app-edit-episode [episode]="episode()" [serie_id]="item()?.id" (close)="closeEpisode($event)"></app-edit-episode>
+        <app-edit-episode [episode]="episode()" [serie_id]="item()?.id" (close)="closeEpisode($event)" (closeAndDelete)="emitDeleteEpisode()"></app-edit-episode>
     </div>
 }

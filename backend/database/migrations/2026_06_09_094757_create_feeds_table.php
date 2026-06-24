@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('feeds', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('serie_id')->constrained('series');
-            $table->foreignUuid('user_id')->constrained('users');
+            $table->foreignUuid('serie_id')->constrained('series')->onDelete('cascade');
+            $table->foreignUuid('user_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

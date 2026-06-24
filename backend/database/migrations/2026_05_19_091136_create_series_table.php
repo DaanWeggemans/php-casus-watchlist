@@ -19,8 +19,8 @@ return new class extends Migration
             $table->integer('index');
             $table->integer('season')->nullable();
             $table->binary('image')->nullable();
-            $table->foreignUuid('franchise_id')->constrained('franchises');
-            $table->foreignUuid('user_id')->constrained('users');
+            $table->foreignUuid('franchise_id')->constrained('franchises')->onDelete('cascade');
+            $table->foreignUuid('user_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

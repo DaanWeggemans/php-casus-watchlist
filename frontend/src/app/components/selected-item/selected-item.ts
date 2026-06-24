@@ -5,6 +5,7 @@ import { Episode } from '../../common/interfaces/episode';
 import { EditEpisode } from '../episode/edit-episode/edit-episode';
 import { EditSerie } from '../serie/edit-serie/edit-serie';
 import { EditFranchise } from '../franchise/edit-franchise/edit-franchise';
+import { updateArray } from '../../common/helpers/update-array';
 
 @Component({
   selector: 'app-selected-item',
@@ -24,6 +25,8 @@ export class SelectedItem {
   updateSerie = output<Serie>();
   updateFranchise = output<Franchise>();
   updateEpisode = output<Episode>();
+  deleteItem = output();
+  deleteEpisode = output<Episode>();
 
   isEditItemOpen = signal<boolean>(false);
   isEditEpisodeOpen = signal<boolean>(false);
@@ -58,5 +61,11 @@ export class SelectedItem {
         this.updateFranchise.emit(item as Franchise);
       }
     }
+  }
+
+  emitDeleteEpisode() {
+    const episode = this.episode();
+    if (episode) this.deleteEpisode.emit(episode);
+    this.closeEpisode(undefined);
   }
 }

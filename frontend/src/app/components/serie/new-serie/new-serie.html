@@ -39,8 +39,8 @@
             <validation-formgroup-error [errors]="formGroup.errors()['file']"></validation-formgroup-error>
         </div>
         <div class="actions">
-            <input class="action" type="submit" value="Create" [disabled]="isLoading()">
-            <button type="button" class="action" (click)="close.emit(undefined)">Back</button>
+            <button class="action" type="submit" [disabled]="isLoading()">+</button>
+            <button class="action" type="button" (click)="close.emit(undefined)">X</button>
         </div>
     </form>
 </div>
