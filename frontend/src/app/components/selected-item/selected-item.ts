@@ -27,6 +27,7 @@ export class SelectedItem {
   updateEpisode = output<Episode>();
   deleteItem = output();
   deleteEpisode = output<Episode>();
+  createEpisode = output();
 
   isEditItemOpen = signal<boolean>(false);
   isEditEpisodeOpen = signal<boolean>(false);
@@ -61,6 +62,18 @@ export class SelectedItem {
         this.updateFranchise.emit(item as Franchise);
       }
     }
+  }
+
+  getType() {
+    const type = (this.type() == 'Franchise' ? this.type() : this.itemAsSerie().type) ?? "";
+    return type.toLowerCase();;
+  }
+
+  emitDeleteItem() {
+    if (!confirm(`Are you sure you want to delete this ${this.getType()}?`))
+      return;
+
+    this.deleteItem.emit();
   }
 
   emitDeleteEpisode() {

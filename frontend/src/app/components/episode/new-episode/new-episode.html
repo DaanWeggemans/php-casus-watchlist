@@ -1,0 +1,13 @@
+<div class="root">
+    <form class="login" [formGroup]="formGroup.group" (ngSubmit)="create()">
+        <div>
+            <label for="episodes">Amount of new episodes</label>
+            <input class="input" id="episodes" type="number" formControlName="episodes">
+            <validation-formgroup-error [errors]="formGroup.errors()['episodes']"></validation-formgroup-error>
+        </div>
+        <div class="actions">
+            <button class="action" type="submit" [disabled]="isLoading()">+</button>
+            <button class="action" type="button" (click)="close.emit(undefined)">X</button>
+        </div>
+    </form>
+</div>

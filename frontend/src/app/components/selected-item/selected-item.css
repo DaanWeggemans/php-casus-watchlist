@@ -25,8 +25,12 @@
     width: 29rem;
 }
 
-.selected-main {
+.episodes {
+    scrollbar-color: var(--primary-button) var(--secondary-background);
     grid-template-columns: repeat(6, 1fr);
+    scrollbar-width: thin;
+    overflow-y: scroll;
+    max-height: 300px;
     display: grid;
     gap: 0.2rem;
 }
@@ -66,4 +70,21 @@
     img {
         width: 100%;
     }
+}
+
+.selected-main-header {
+    position: relative;
+    padding: 20px 0;
+
+    .selected-actions {
+        transform: translate(-50%, -50%);
+        right: -25px;
+        top: 50%;
+    }
+}
+
+.information {
+    justify-content: space-between;
+    text-transform: capitalize;
+    display: flex;
 }

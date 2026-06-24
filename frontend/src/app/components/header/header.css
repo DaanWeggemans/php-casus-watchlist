@@ -40,12 +40,46 @@ nav {
 }
 
 #profile {
-    background-color: var(--secondary-background);
-    border: 1px solid var(--primary-button);
-    border-radius: 50%;
+    position: relative;
 
-    &:hover {
+    &:hover .profile-icon {
         background-color: var(--primary-button-hover);
+    }
+
+    &:hover .username {
+        display: initial;
+    }
+
+    * {
+        height: inherit;
+    }
+
+    .username {
+        background-color: var(--secondary-background);
+        border-radius: 65px;
+        position: absolute;
+        overflow: hidden;
+        padding: 20px;
+        display: none;
+        width: 250px;
+        z-index: 1;
+        right: 0;
+
+        p {
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+            width: 150px;
+        }
+    }
+
+    .profile-icon {
+        background-color: var(--primary-button);
+        aspect-ratio: 1 / 1;
+        border-radius: 50%;
+        position: absolute;
+        z-index: 2;
+        right: 0;
     }
 }
 

@@ -10,10 +10,11 @@ import { Serie } from '../../common/interfaces/serie';
 import { SelectedItem } from '../../components/selected-item/selected-item';
 import { Episode } from '../../common/interfaces/episode';
 import { updateArray } from '../../common/helpers/update-array';
+import { NewEpisode } from '../../components/episode/new-episode/new-episode';
 
 @Component({
   selector: 'app-watchlist',
-  imports: [Header, NewFranchise, NewSerie, SelectedItem],
+  imports: [Header, NewFranchise, NewSerie, NewEpisode, SelectedItem],
   templateUrl: './watchlist.html',
   styleUrl: './watchlist.css',
 })
@@ -34,6 +35,7 @@ export class Watchlist {
 
   isCreateFranchiseOpen = signal<boolean>(false);
   isCreateSerieOpen = signal<boolean>(false);
+  isCreateEpisodeOpen = signal<boolean>(false);
 
   ngOnInit() {
     this.getAllFranchises();
@@ -120,6 +122,13 @@ export class Watchlist {
 
       return value;
     });
+  }
+
+  toggleCreateEpisode(episodes: Episode[] | undefined) {
+    this.isCreateEpisodeOpen.set(!this.isCreateEpisodeOpen());
+    if (!episodes) return;
+
+    this.episodes.set(updateArray(undefined, [...this.episodes(), ...episodes]));
   }
 
   updateFranchise(franchise: Franchise) {

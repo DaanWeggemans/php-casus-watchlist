@@ -82,7 +82,7 @@ export class EditEpisode implements OnInit {
   }
 
   async delete() {
-    if (this.isLoading())
+    if (this.isLoading() || !confirm("Are you sure you want to delete this episode?"))
       return;
 
     const episode = this.episode();

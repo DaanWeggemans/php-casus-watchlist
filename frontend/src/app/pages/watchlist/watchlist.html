@@ -44,7 +44,7 @@
         @else {
             <app-selected-item type="Serie" [franchise_id]="franchise()?.id" [item]="serie()" [episodes]="episodes()" (close)="closeSerie()"
                 (updateSerie)="updateSerie($event)" (updateEpisode)="updateEpisode($event)" (toggleVisibility)="toggleVisibility()"
-                (deleteItem)="deleteItem()" (deleteEpisode)="deleteEpisode($event)"></app-selected-item>
+                (deleteItem)="deleteItem()" (deleteEpisode)="deleteEpisode($event)" (createEpisode)="toggleCreateEpisode(undefined)"></app-selected-item>
         }
     </main>
 </div>
@@ -58,5 +58,11 @@
 @if (isCreateSerieOpen()) {
     <div class="modal">
         <app-new-serie [franchise_id]="franchise()?.id" (close)="toggleCreateSerie($event)"></app-new-serie>
+    </div>
+}
+
+@if (isCreateEpisodeOpen()) {
+    <div class="modal">
+        <app-new-episode [serie_id]="serie()?.id" (close)="toggleCreateEpisode($event)"></app-new-episode>
     </div>
 }

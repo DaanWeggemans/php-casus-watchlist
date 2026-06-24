@@ -6,7 +6,7 @@
                     <img [src]="item()?.is_shared ? '/set-to-public-icon.png' : '/set-to-private-icon.png'" alt="Visibility">
                 </button>
             }
-            <button class="selected-action" (click)="deleteItem.emit()">
+            <button class="selected-action" (click)="emitDeleteItem()">
                 <img src="/delete-icon.png" alt="Delete">
             </button>
             <button class="selected-action" (click)="openItem()">
@@ -16,13 +16,29 @@
         </div>
         <div class="selected-header">
             <h2>{{ item()?.name }}</h2>
+            <div class="information">
+                <p>Type: {{ getType() }}</p>
+                @if (type() == 'Serie') {
+                    <p>{{ itemAsSerie().done ? "Finished" : 'Not Finished' }}</p>
+                }
+            </div>
         </div>
         <div class="selected-main">
-            @for (episode of episodes() ?? []; track episode.id) {
-                <button [class]="`selected-episode${episode.done ? ' watched' : ''}`" (click)="openEpisode(episode)">
-                    {{ `EP${episode.index.toString().padStart(3, '0')}` }}
-                </button>
+            @if (type() == 'Serie' && itemAsSerie().type == 'serie') {
+                <div class="selected-main-header">
+                    <h2>Episodes</h2>
+                    <div class="selected-actions" (click)="createEpisode.emit()">
+                        <button class="selected-action">+</button>
+                    </div>
+                </div>
             }
+            <div class="episodes">
+                @for (episode of episodes() ?? []; track episode.id) {
+                    <button [class]="`selected-episode${episode.done ? ' watched' : ''}`" (click)="openEpisode(episode)">
+                        {{ `EP${episode.index.toString().padStart(3, '0')}` }}
+                    </button>
+                }
+            </div>
         </div>
     </div>
 </div>

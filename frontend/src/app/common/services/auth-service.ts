@@ -6,7 +6,7 @@ import { LoginBody, RegisterBody } from "../interfaces/auth";
 @Injectable({ providedIn: 'root' })
 export class AuthService {
     private authClient = inject(AuthClient);
-    private _user?: User;
+    _user?: User;
     isAuthorized = signal<boolean | undefined>(undefined);
 
     async login(body: LoginBody) {
