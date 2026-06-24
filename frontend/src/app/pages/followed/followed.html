@@ -13,7 +13,7 @@
                 <div class="profile">
                     <div class="top">
                         <div class="profile-icon"></div>
-                        <div class="username">{{ feed.user.username }}</div>
+                        <div class="username" [title]="feed.user.username">{{ feed.user.username }}</div>
                         <div class="date-shared">
                             <span>Posted on: </span>
                             <span>{{ toReadable(feed.shared_on) }}</span>
@@ -26,9 +26,9 @@
                 <div class="content">
                     <div class="information">
                         <div class="top">
-                            <h2 class="title">{{ feed.user.username }} has shared a {{ feed.serie.type }}: {{ feed.serie.name }}</h2>
+                            <h2 class="title" [title]="getTitle(feed)">{{ getTitle(feed) }}</h2>
                             @if (feed.serie.done) {
-                                <p>{{ feed.user.username }} has finished {{ feed.serie.name }}</p>
+                                <p class="description" [title]="getDescription(feed)">{{ getDescription(feed) }}</p>
                             }
                         </div>
                         <div class="bottom">

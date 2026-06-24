@@ -20,6 +20,10 @@ main {
     flex: 1;
 }
 
+.franchises > p {
+    text-align: center;
+}
+
 .franchise {
     background-color: var(--secondary-background);
     border: 2px solid var(--primary-button);

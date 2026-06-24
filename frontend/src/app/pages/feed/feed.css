@@ -60,7 +60,11 @@ main {
 }
 
 .username {
+    width: calc(91.11px - 11px);
+    text-overflow: ellipsis;
+    white-space: nowrap;
     font-weight: bold;
+    overflow: hidden;
 }
 
 .date-shared {
@@ -88,8 +92,19 @@ main {
     width: 100%;
 }
 
+.title, .description {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 345px;
+}
+
 .title {
-    font-size: 1.4rem;
+    font-size: 1.2rem;
+}
+
+.description {
+    font-size: 0.8rem;
 }
 
 .information {
